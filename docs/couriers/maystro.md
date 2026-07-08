@@ -44,7 +44,7 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
   day.
 - **Commune IDs**: Maystro's API doesn't take commune names, it takes internal
   numeric commune IDs. You still send `communeName` as a string like with every
-  other courier; the resolution to Maystro's ID happens inside freeship. If the
+  other courier; the resolution to Maystro's ID happens inside dzship. If the
   name doesn't resolve, you'll get a `courier_error` naming the commune, which
   almost always means a spelling mismatch with the official list.
 - **Status codes**: Maystro reports status as bare numbers, and the numbering
@@ -54,5 +54,5 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
   means delivered.
 - **Cancel and labels**: both available through the API.
 
-Full request/response reference: [freeship API
+Full request/response reference: [dzship API
 docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).

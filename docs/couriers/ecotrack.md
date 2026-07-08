@@ -49,7 +49,7 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 ## Ecotrack-specific behavior
 
 - **Labels come back as PDF**: the label endpoint returns raw PDF bytes rather
-  than a URL. freeship handles the difference; if you get a `labelUrl`, it's
+  than a URL. dzship handles the difference; if you get a `labelUrl`, it's
   printable.
 - **Status wording drifts per tenant**: each courier can customize status
   labels, so tenant A's "En livraison" can be tenant B's "Sorti en livraison".
@@ -58,7 +58,7 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
   original text, so nothing is silently mislabeled.
 - **Tracking lookups need care**: the underlying Ecotrack tracking API answers
   list-style queries, and a lazy "take the first row" client can attach the
-  wrong parcel's status to your order. The freeship integration matches the
+  wrong parcel's status to your order. The dzship integration matches the
   exact tracking number. Worth knowing if you ever debug against the raw API.
 - **No cancel endpoint**: cancel from the courier's dashboard.
 
@@ -70,5 +70,5 @@ like the general [choosing-a-courier](../choosing-a-courier.md) question:
 short-list couriers your target wilayas trust, run a small volume through each,
 compare outcomes. Switching later is a `baseUrl` change.
 
-Full request/response reference: [freeship API
+Full request/response reference: [dzship API
 docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).

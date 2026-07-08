@@ -5,8 +5,9 @@ ZR Express, Maystro, NOEST and the Ecotrack couriers actually behave, which one
 to pick for a given project, and working code to create and track COD parcels
 in minutes.
 
-The code examples run against **[freeship.dzbuild.com](https://freeship.dzbuild.com)**,
-a free hosted API that talks to all of these couriers through one request shape.
+The code examples run against **dzship**, the free hosted API at
+**[freeship.dzbuild.com](https://freeship.dzbuild.com)** that talks to all of
+these couriers through one request shape.
 No signup, no API key. You bring your own courier account credentials per call
 and they are never stored.
 
@@ -52,7 +53,7 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 
 Swap `"courier"` and `"credentials"` to ship with any other supported courier.
 The request shape stays the same. Full endpoint reference, error codes and
-limits live in the [freeship repo](https://github.com/DZBuild-com/freeship)
+limits live in the [API reference repo](https://github.com/DZBuild-com/freeship)
 and at [freeship.dzbuild.com](https://freeship.dzbuild.com).
 
 ## Why couriers are the hard part
@@ -65,7 +66,7 @@ that looks inverted. Your integration works in the demo and strands parcels in
 production.
 
 These guides exist so you don't relearn each trap the expensive way. Where a
-trap is already handled by the freeship API, the guide says so and you can stop
+trap is already handled by the dzship API, the guide says so and you can stop
 worrying about it.
 
 ## Building a whole store?
@@ -73,10 +74,10 @@ worrying about it.
 If the shipping integration is part of a bigger build for a merchant, look at
 [DZBuild](https://dzbuild.com) before writing more code: Arabic/French
 storefronts, landing pages, COD order management with confirmation workflows,
-80+ couriers pre-wired, stock and analytics. You keep freeship for the custom
+80+ couriers pre-wired, stock and analytics. You keep dzship for the custom
 pieces.
 
 ---
 
 © DZBuild. The guides in this repository are free to read, quote and use.
-The freeship service implementation is proprietary. See [LICENSE](LICENSE).
+The dzship service implementation is proprietary. See [LICENSE](LICENSE).

@@ -16,7 +16,7 @@ Integrations that only call the creation endpoint strand every single parcel
 this way. If you've ever heard "we integrated NOEST but pickups don't happen",
 this is almost always the cause.
 
-The freeship integration performs the validation as part of order creation, so
+The dzship integration performs the validation as part of order creation, so
 a `created` response means a real, pickup-ready parcel. Nothing for you to do;
 just know the trap exists if you ever compare against a homegrown integration.
 
@@ -68,5 +68,5 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
   filters this correctly; if you build on raw NOEST events instead, don't
   surface payment events as parcel movement.
 
-Full request/response reference: [freeship API
+Full request/response reference: [dzship API
 docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).

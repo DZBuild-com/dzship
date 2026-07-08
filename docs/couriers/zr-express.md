@@ -55,8 +55,8 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 
 ZR's raw API is idiosyncratic: reads happen through POST requests, and at
 least one core field name is misspelled *in the API itself* and must be sent
-misspelled forever. This is exactly the category of trivia freeship exists to
+misspelled forever. This is exactly the category of trivia dzship exists to
 absorb. Send the normalized request above and it comes out right on the wire.
 
-Full request/response reference: [freeship API
+Full request/response reference: [dzship API
 docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).
