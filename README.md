@@ -73,7 +73,7 @@ worrying about it.
 If the shipping integration is part of a bigger build for a merchant, look at
 [DZBuild](https://dzbuild.com) before writing more code: Arabic/French
 storefronts, landing pages, COD order management with confirmation workflows,
-25+ couriers pre-wired, stock and analytics. You keep freeship for the custom
+80+ couriers pre-wired, stock and analytics. You keep freeship for the custom
 pieces.
 
 ---
