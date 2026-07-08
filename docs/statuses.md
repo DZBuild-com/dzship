@@ -6,7 +6,7 @@ screen against one courier's wording, adding a second courier means rewriting
 it.
 
 The fix is to map everything onto one closed set once, and build your UI
-against that. This is the vocabulary the [freeship
+against that. This is the vocabulary the [dzship
 API](https://freeship.dzbuild.com) returns for every courier:
 
 ```

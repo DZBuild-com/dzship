@@ -70,9 +70,9 @@ network's own dashboard. Everything else in this guide applies unchanged.
 You can. But the public docs don't match the live API in places (endpoints
 that have moved or gone, response shapes that changed), and you'd still have to
 build the status mapping and Arabic-text edge cases yourself. The
-[freeship](https://freeship.dzbuild.com) integration is verified against
+[dzship](https://freeship.dzbuild.com) integration is verified against
 production traffic daily, and it's free, so direct integration mostly buys you
 maintenance work.
 
-Full request/response reference: [freeship API
+Full request/response reference: [dzship API
 docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).

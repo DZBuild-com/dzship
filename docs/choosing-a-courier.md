@@ -22,7 +22,7 @@ started wiring couriers into [DZBuild](https://dzbuild.com).
 
 Merchants rarely stay with one. Most stores we see run two or three couriers
 and route by wilaya or by what the customer picked at checkout. Build for that
-from day one; with [freeship](https://freeship.dzbuild.com) it's the same
+from day one; with [dzship](https://freeship.dzbuild.com) it's the same
 request with a different `courier` value.
 
 ## Capability matrix
@@ -70,7 +70,7 @@ URL), duplicate policies (Maystro), and validation steps (NOEST).
 
 ## Try them without rewriting anything
 
-The point of the [freeship API](https://freeship.dzbuild.com) is that switching
+The point of the [dzship API](https://freeship.dzbuild.com) is that switching
 courier is a one-line change. Open an account with two couriers, ship a week
 with each in your main wilayas, and compare delivered rate and return rate.
 That experiment answers the question better than any comparison table,
