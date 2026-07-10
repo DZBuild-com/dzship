@@ -20,6 +20,7 @@ from that shipping engine.
 | Guide | What it answers |
 |---|---|
 | [Choosing a courier](docs/choosing-a-courier.md) | Which delivery company fits your project: coverage, stop-desk, exchanges, API quality |
+| [Wilayas & communes](docs/wilayas-and-communes.md) | The complete official dataset (58 wilayas, 1,541 communes, FR + AR) and the matching rules couriers expect |
 | [Yalidine](docs/couriers/yalidine.md) | The biggest network. Also covers Yalitec, Guepex, Easy & Speed |
 | [ZR Express](docs/couriers/zr-express.md) | Procolis. Strong in the center, simple credential model |
 | [Maystro](docs/couriers/maystro.md) | Fulfillment-style courier with a strict duplicate policy |
@@ -55,6 +56,23 @@ Swap `"courier"` and `"credentials"` to ship with any other supported courier.
 The request shape stays the same. Full endpoint reference, error codes and
 limits live in the [API reference repo](https://github.com/DZBuild-com/freeship)
 and at [freeship.dzbuild.com](https://freeship.dzbuild.com).
+
+## Free dataset: all 58 wilayas and 1,541 communes
+
+Most Algerian projects rebuild this list by hand, badly. It's in
+[`data/`](data/) as JSON and CSV — French + Arabic names, numeric wilaya codes,
+current 58-wilaya division:
+
+```js
+const wilayas = await fetch(
+  "https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/wilayas.json"
+).then((r) => r.json());
+```
+
+Free to use in any project, no attribution needed. The
+[wilayas & communes guide](docs/wilayas-and-communes.md) explains the traps:
+commune spelling drift between couriers, homonym communes in different wilayas,
+and why you should always store the wilaya code, never the name.
 
 ## Why couriers are the hard part
 
