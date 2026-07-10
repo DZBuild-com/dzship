@@ -4,6 +4,10 @@ The guides and documentation in this repository may be read, referenced,
 quoted, and used freely to build shipping integrations. Republishing them
 wholesale requires a link back to this repository.
 
+The wilaya and commune datasets in the data/ directory describe public
+administrative facts and are dedicated to the public domain (CC0). Use them
+in any project, commercial or not, with no attribution required.
+
 The freeship service (https://freeship.dzbuild.com) and its implementation
 are proprietary to DZBuild. No rights to the service implementation are
 granted.
