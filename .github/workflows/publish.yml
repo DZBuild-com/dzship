@@ -1,0 +1,57 @@
+name: Publish to npm
+
+# Publishes the package whenever the version in package.json changes on main.
+# Requires the NPM_TOKEN repository secret (npm Automation token).
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - package.json
+      - clients/node/**
+      - README.md
+      - LICENSE
+      - .github/workflows/publish.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - name: Skip if this version is already published
+        id: check
+        run: |
+          LOCAL=$(node -p "require('./package.json').version")
+          PUBLISHED=$(npm view dzship version 2>/dev/null || echo "none")
+          echo "local=$LOCAL published=$PUBLISHED"
+          if [ "$LOCAL" = "$PUBLISHED" ]; then
+            echo "publish=no" >> "$GITHUB_OUTPUT"
+          else
+            echo "publish=yes" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Smoke-test the client against the live API
+        if: steps.check.outputs.publish == 'yes'
+        run: |
+          node -e "
+          const dzship = require('./clients/node/index.cjs');
+          dzship.couriers().then(c => {
+            if (!Array.isArray(c) || c.length < 1) throw new Error('bad couriers response');
+            console.log('gateway OK,', c.length, 'couriers');
+          });"
+
+      - name: Publish
+        if: steps.check.outputs.publish == 'yes'
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
