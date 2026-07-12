@@ -11,7 +11,7 @@ Full request/response reference: [docs/api — freeship.dzbuild.com](https://fre
 
 | Stack | Fastest path |
 |---|---|
-| Node.js 18+ | `npm install DZBuild-com/dzship` → [Node client](#nodejs) |
+| Node.js 18+ | `npm install dzship` → [Node client](#nodejs) |
 | PHP (plain, Laravel, WooCommerce) | copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) → [PHP](#php) |
 | Python (Django, Flask, FastAPI, scripts) | copy [`clients/python/dzship.py`](../clients/python/dzship.py) → [Python](#python) |
 | Google Sheets / Apps Script | [Apps Script snippet](#google-sheets--apps-script) |
@@ -32,11 +32,13 @@ environment variables or your framework's secret store.
 
 ## Node.js
 
-Install straight from GitHub (no registry needed), Node 18+:
+Node 18+:
 
 ```bash
-npm install DZBuild-com/dzship
+npm install dzship
 ```
+
+(Installing straight from GitHub also works: `npm install DZBuild-com/dzship`.)
 
 ```js
 import dzship from 'dzship';           // or: const dzship = require('dzship')
