@@ -227,6 +227,7 @@ footer a{color:var(--text-2)}
         <a class="btn" href="https://github.com/DZBuild-com/dzship" rel="noopener">Courier guides →</a>
       </div>
       <div class="hero-meta">
+        <span id="reqStat" hidden><b id="reqStatN">0</b> requests served</span>
         <span><b>POST</b> /v1/orders</span>
         <span><b>POST</b> /v1/track</span>
         <span><b>POST</b> /v1/rates</span>
@@ -527,6 +528,18 @@ footer a{color:var(--text-2)}
       var s = document.getElementById(id); if (s) io.observe(s);
     });
   }
+})();
+</script>
+<script>
+(function () {
+  var el = document.getElementById('reqStat'), n = document.getElementById('reqStatN');
+  if (!el || !n || !window.fetch) return;
+  fetch('/stats').then(function (r) { return r.json(); }).then(function (d) {
+    if (d && typeof d.totalRequests === 'number' && d.totalRequests > 0) {
+      n.textContent = d.totalRequests.toLocaleString('en-US');
+      el.hidden = false;
+    }
+  }).catch(function () {});
 })();
 </script>
 </body>
