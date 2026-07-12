@@ -1,5 +1,7 @@
 # dzship — Algerian shipping, explained for developers
 
+[![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship)
+
 Everything you need to integrate delivery couriers in Algeria: how Yalidine,
 ZR Express, Maystro, NOEST and the Ecotrack couriers actually behave, which one
 to pick for a given project, and working code to create and track COD parcels
@@ -62,8 +64,8 @@ limits live at [freeship.dzbuild.com](https://freeship.dzbuild.com).
 The [`clients/`](clients/) directory has MIT-licensed clients that wrap the
 same three calls, with typed errors and retry-after handling built in:
 
-- **Node.js** — `npm install DZBuild-com/dzship` (installs straight from
-  GitHub, zero dependencies, TypeScript types included):
+- **Node.js** — [`npm install dzship`](https://www.npmjs.com/package/dzship)
+  (zero dependencies, TypeScript types included):
 
   ```js
   import dzship from 'dzship';
