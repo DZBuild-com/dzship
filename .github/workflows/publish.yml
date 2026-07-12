@@ -1,7 +1,10 @@
 name: Publish to npm
 
-# Publishes the package whenever the version in package.json changes on main.
-# Requires the NPM_TOKEN repository secret (npm Automation token).
+# On every push to main with a new version in package.json:
+#   1. publish to the npm registry (needs the NPM_TOKEN secret, an npm Automation token)
+#   2. publish to GitHub Packages as @dzbuild-com/dzship (built-in GITHUB_TOKEN)
+#   3. create the matching GitHub release
+# Nothing runs twice: each step checks whether its target already has the version.
 
 on:
   push:
@@ -15,7 +18,8 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  packages: write
 
 jobs:
   publish:
@@ -28,20 +32,24 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - name: Skip if this version is already published
+      - name: Read versions
         id: check
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           LOCAL=$(node -p "require('./package.json').version")
-          PUBLISHED=$(npm view dzship version 2>/dev/null || echo "none")
-          echo "local=$LOCAL published=$PUBLISHED"
-          if [ "$LOCAL" = "$PUBLISHED" ]; then
-            echo "publish=no" >> "$GITHUB_OUTPUT"
-          else
-            echo "publish=yes" >> "$GITHUB_OUTPUT"
-          fi
+          NPM=$(npm view dzship version 2>/dev/null || echo "none")
+          echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN" >> ~/.npmrc
+          GHP=$(npm view @dzbuild-com/dzship version --registry=https://npm.pkg.github.com 2>/dev/null || echo "none")
+          RELEASE=$(gh release view "v$LOCAL" --repo "$GITHUB_REPOSITORY" --json tagName -q .tagName 2>/dev/null || echo "none")
+          echo "local=$LOCAL npm=$NPM ghp=$GHP release=$RELEASE"
+          echo "version=$LOCAL" >> "$GITHUB_OUTPUT"
+          [ "$LOCAL" = "$NPM" ] && echo "npm=skip" >> "$GITHUB_OUTPUT" || echo "npm=publish" >> "$GITHUB_OUTPUT"
+          [ "$LOCAL" = "$GHP" ] && echo "ghp=skip" >> "$GITHUB_OUTPUT" || echo "ghp=publish" >> "$GITHUB_OUTPUT"
+          [ "$RELEASE" = "none" ] && echo "release=create" >> "$GITHUB_OUTPUT" || echo "release=skip" >> "$GITHUB_OUTPUT"
 
       - name: Smoke-test the client against the live API
-        if: steps.check.outputs.publish == 'yes'
+        if: steps.check.outputs.npm == 'publish' || steps.check.outputs.ghp == 'publish'
         run: |
           node -e "
           const dzship = require('./clients/node/index.cjs');
@@ -50,8 +58,26 @@ jobs:
             console.log('gateway OK,', c.length, 'couriers');
           });"
 
-      - name: Publish
-        if: steps.check.outputs.publish == 'yes'
+      - name: Publish to npm
+        if: steps.check.outputs.npm == 'publish'
         run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to GitHub Packages
+        if: steps.check.outputs.ghp == 'publish'
+        run: |
+          npm pkg set name=@dzbuild-com/dzship
+          npm publish --access public --registry=https://npm.pkg.github.com
+          npm pkg set name=dzship
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create GitHub release
+        if: steps.check.outputs.release == 'create'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          V=${{ steps.check.outputs.version }}
+          gh release create "v$V" --repo "$GITHUB_REPOSITORY" \
+            --title "dzship $V" --generate-notes
