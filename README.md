@@ -1,6 +1,6 @@
 # dzship — Algerian shipping, explained for developers
 
-[![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship)
+[![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com)
 
 Everything you need to integrate delivery couriers in Algeria: how Yalidine,
 ZR Express, Maystro, NOEST and the Ecotrack couriers actually behave, which one
