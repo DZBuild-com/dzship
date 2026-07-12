@@ -1,0 +1,44 @@
+{
+  "name": "dzship",
+  "version": "1.0.0",
+  "description": "Client for dzship — the free shipping API for Algeria. Create and track COD parcels with Yalidine, ZR Express, Maystro, NOEST and 30+ Ecotrack couriers through one request shape.",
+  "license": "MIT",
+  "homepage": "https://freeship.dzbuild.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DZBuild-com/dzship.git"
+  },
+  "main": "clients/node/index.cjs",
+  "types": "clients/node/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./clients/node/index.d.ts",
+      "import": "./clients/node/index.mjs",
+      "require": "./clients/node/index.cjs"
+    }
+  },
+  "files": [
+    "clients/node",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "algeria",
+    "shipping",
+    "delivery",
+    "cod",
+    "cash-on-delivery",
+    "yalidine",
+    "zr-express",
+    "maystro",
+    "noest",
+    "ecotrack",
+    "dzbuild",
+    "livraison",
+    "dz"
+  ],
+  "author": "DZBuild (https://dzbuild.com)"
+}

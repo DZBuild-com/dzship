@@ -8,6 +8,13 @@ The wilaya and commune datasets in the data/ directory describe public
 administrative facts and are dedicated to the public domain (CC0). Use them
 in any project, commercial or not, with no attribution required.
 
+The client libraries in the clients/ directory are licensed under the MIT
+License: permission is hereby granted, free of charge, to any person obtaining
+a copy of those files, to deal in them without restriction, including without
+limitation the rights to use, copy, modify, merge, publish, distribute,
+sublicense, and/or sell copies, subject to no conditions. THE SOFTWARE IS
+PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+
 The freeship service (https://freeship.dzbuild.com) and its implementation
 are proprietary to DZBuild. No rights to the service implementation are
 granted.

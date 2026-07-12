@@ -19,6 +19,7 @@ from that shipping engine.
 
 | Guide | What it answers |
 |---|---|
+| [Integrating dzship](docs/integrating.md) | Ready-made clients (Node, PHP, Python) and copy-paste snippets for every stack |
 | [Choosing a courier](docs/choosing-a-courier.md) | Which delivery company fits your project: coverage, stop-desk, exchanges, API quality |
 | [Wilayas & communes](docs/wilayas-and-communes.md) | The complete official dataset (58 wilayas, 1,541 communes, FR + AR) and the matching rules couriers expect |
 | [Yalidine](docs/couriers/yalidine.md) | The biggest network. Also covers Yalitec, Guepex, Easy & Speed |
@@ -54,8 +55,30 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 
 Swap `"courier"` and `"credentials"` to ship with any other supported courier.
 The request shape stays the same. Full endpoint reference, error codes and
-limits live in the [API reference repo](https://github.com/DZBuild-com/freeship)
-and at [freeship.dzbuild.com](https://freeship.dzbuild.com).
+limits live at [freeship.dzbuild.com](https://freeship.dzbuild.com).
+
+## Or skip the raw HTTP — ready-made clients
+
+The [`clients/`](clients/) directory has MIT-licensed clients that wrap the
+same three calls, with typed errors and retry-after handling built in:
+
+- **Node.js** — `npm install DZBuild-com/dzship` (installs straight from
+  GitHub, zero dependencies, TypeScript types included):
+
+  ```js
+  import dzship from 'dzship';
+
+  const client = dzship({ courier: 'yalidine', credentials: { apiId: '…', apiToken: '…' } });
+  const { trackingNumber } = await client.createOrder({ /* recipient, productList, codAmount… */ });
+  ```
+
+- **PHP** — copy the single file [`clients/php/Dzship.php`](clients/php/Dzship.php)
+  (ext-curl only, shared-hosting friendly).
+- **Python** — copy the single file [`clients/python/dzship.py`](clients/python/dzship.py)
+  (standard library only, 3.8+).
+
+The [integration guide](docs/integrating.md) has full examples for Laravel,
+WooCommerce, Django, Google Sheets and raw HTTP in any language.
 
 ## Free dataset: all 58 wilayas and 1,541 communes
 
