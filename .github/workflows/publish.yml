@@ -39,7 +39,7 @@ jobs:
         run: |
           LOCAL=$(node -p "require('./package.json').version")
           NPM=$(npm view dzship version 2>/dev/null || echo "none")
-          echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN" >> "${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
           GHP=$(npm view @dzbuild-com/dzship version --registry=https://npm.pkg.github.com 2>/dev/null || echo "none")
           RELEASE=$(gh release view "v$LOCAL" --repo "$GITHUB_REPOSITORY" --json tagName -q .tagName 2>/dev/null || echo "none")
           echo "local=$LOCAL npm=$NPM ghp=$GHP release=$RELEASE"
@@ -67,11 +67,12 @@ jobs:
       - name: Publish to GitHub Packages
         if: steps.check.outputs.ghp == 'publish'
         run: |
+          echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN" >> "${NPM_CONFIG_USERCONFIG:-$HOME/.npmrc}"
           npm pkg set name=@dzbuild-com/dzship
           npm publish --access public --registry=https://npm.pkg.github.com
           npm pkg set name=dzship
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create GitHub release
         if: steps.check.outputs.release == 'create'
