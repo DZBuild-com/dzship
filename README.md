@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com)
 
-Everything you need to integrate delivery couriers in Algeria: how Yalidine,
+Everything you need to integrate easily delivery couriers in Algeria: how Yalidine,
 ZR Express, Maystro, NOEST and the Ecotrack couriers actually behave, which one
 to pick for a given project, and working code to create and track COD parcels
 in minutes.
@@ -14,7 +14,7 @@ No signup, no API key. You bring your own courier account credentials per call
 and they are never stored.
 
 Maintained by [DZBuild](https://dzbuild.com), the e-commerce platform that moves
-real COD orders across all 58 wilayas every day. These guides are the field notes
+real COD orders across all wilayas every day. These guides are the field notes
 from that shipping engine.
 
 ## Start here
