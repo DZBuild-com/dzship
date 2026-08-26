@@ -25,7 +25,10 @@ export interface Order {
 }
 
 export interface AdapterOptions {
-  /** Ecotrack tenant URL, e.g. https://courier.ecotrack.dz */
+  /**
+   * Tenant URL for the generic `ecotrack` courier, e.g. https://courier.ecotrack.dz.
+   * Every other courier has its own key and needs no URL.
+   */
   baseUrl?: string;
   /** Origin wilaya code (1-58) */
   fromWilaya?: number;
@@ -70,15 +73,49 @@ export interface RatesResult {
 export interface CourierInfo {
   key: string;
   name: string;
+  platform?: string;
+  aliases?: string[];
   requiredCredentials: string[];
   capabilities: Record<string, boolean>;
+  /** The endpoint dzship uses for this courier, when it is fixed. */
+  endpoint?: string;
+  /** True for the generic Ecotrack key: you name the tenant yourself. */
+  requiresBaseUrl?: boolean;
+  baseUrlSuffixes?: string[];
   [k: string]: unknown;
 }
 
 export interface Wilaya {
   code: number;
+  nameFr: string;
+  nameAr: string;
+  isDeepSouth: boolean;
+  communeCount: number;
+  /** False for a wilaya that exists in law but that couriers do not accept yet. */
+  courierSupported: boolean;
+  /** For an unsupported wilaya: the code to send to the courier instead. */
+  shipAs?: number;
   [k: string]: unknown;
 }
+
+export interface Commune {
+  wilayaCode: number;
+  nameFr: string;
+  nameAr: string;
+  /** The Journal Officiel spelling, when couriers use a different one. */
+  gazetteName?: string;
+  /** Present on communes of a 2026 wilaya: the code to ship with. */
+  shipAs?: number;
+}
+
+export interface RequestOptions {
+  gateway?: string;
+  timeoutMs?: number;
+}
+
+export type WilayaQuery = number | string | { code?: number; q?: string; all?: boolean };
+export type CommuneQuery = number | string | { wilaya?: number; q?: string };
+export type CourierQuery = string | { platform?: string; q?: string };
 
 export declare class DzshipError extends Error {
   status: number;
@@ -91,11 +128,15 @@ export interface Client {
   createOrder(order: Order): Promise<CreateOrderResult>;
   track(trackingNumber: string): Promise<TrackResult>;
   rates(query: RatesQuery): Promise<RatesResult>;
+  wilayas(query?: WilayaQuery): Promise<Wilaya[] | Wilaya>;
+  communes(query?: CommuneQuery): Promise<Commune[]>;
+  couriers(query?: CourierQuery): Promise<CourierInfo[]>;
 }
 
 export interface ClientConfig {
   courier: string;
-  credentials: Record<string, string>;
+  /** That courier's own fields. Omit for the sandbox courier, which needs none. */
+  credentials?: Record<string, string>;
   options?: AdapterOptions;
   gateway?: string;
   timeoutMs?: number;
@@ -104,9 +145,10 @@ export interface ClientConfig {
 declare function dzship(config: ClientConfig): Client;
 
 declare namespace dzship {
-  function couriers(): Promise<CourierInfo[]>;
-  function wilayas(): Promise<Wilaya[]>;
-  function health(): Promise<{ status: string }>;
+  function couriers(query?: CourierQuery, opts?: RequestOptions): Promise<CourierInfo[]>;
+  function wilayas(query?: WilayaQuery, opts?: RequestOptions): Promise<Wilaya[] | Wilaya>;
+  function communes(query?: CommuneQuery, opts?: RequestOptions): Promise<Commune[]>;
+  function health(opts?: RequestOptions): Promise<{ status: string }>;
   const GATEWAY: string;
   export { DzshipError };
 }

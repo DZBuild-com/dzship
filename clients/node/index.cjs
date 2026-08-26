@@ -65,6 +65,37 @@ async function request(path, { method = 'GET', body, gateway = GATEWAY, timeoutM
 }
 
 /**
+ * Build the query string for a reference lookup.
+ *
+ * Accepts what you would naturally type: nothing, a wilaya code, a search term,
+ * or an object. `dzship.wilayas(16)` becomes `?16` — the shorthand the API takes.
+ */
+function referenceQuery(arg) {
+  if (arg === undefined || arg === null || arg === '') return '';
+  if (typeof arg === 'number') return '?' + arg;
+  if (typeof arg === 'string') return '?q=' + encodeURIComponent(arg);
+  const parts = [];
+  if (arg.code !== undefined) parts.push('code=' + encodeURIComponent(arg.code));
+  if (arg.wilaya !== undefined) parts.push('wilaya=' + encodeURIComponent(arg.wilaya));
+  if (arg.q) parts.push('q=' + encodeURIComponent(arg.q));
+  if (arg.platform) parts.push('platform=' + encodeURIComponent(arg.platform));
+  if (arg.all) parts.push('all=1');
+  return parts.length ? '?' + parts.join('&') : '';
+}
+
+/**
+ * The reference helpers used to take request options as their only argument, so a
+ * first argument that carries nothing but `gateway` / `timeoutMs` still means that.
+ */
+function splitArgs(first, second) {
+  const isOpts =
+    first &&
+    typeof first === 'object' &&
+    Object.keys(first).every((k) => k === 'gateway' || k === 'timeoutMs');
+  return isOpts ? { query: undefined, opts: first } : { query: first, opts: second };
+}
+
+/**
  * Create a client bound to one courier account.
  *
  * const client = dzship({
@@ -77,22 +108,58 @@ async function request(path, { method = 'GET', body, gateway = GATEWAY, timeoutM
  * await client.rates({ toWilaya: 31, deliveryType: 'home' });
  */
 function dzship({ courier, credentials, options, gateway = GATEWAY, timeoutMs } = {}) {
-  if (!courier || !credentials) {
-    throw new TypeError('dzship({ courier, credentials }) — both are required');
+  if (!courier) {
+    throw new TypeError('dzship({ courier }) — courier is required');
   }
-  const base = { courier, credentials, ...(options ? { options } : {}) };
+  // The sandbox courier takes no credentials; every other one will say which it needs.
+  const hasCredentials = credentials && Object.keys(credentials).length > 0;
+  const base = { courier, ...(hasCredentials ? { credentials } : {}), ...(options ? { options } : {}) };
   const opts = { gateway, ...(timeoutMs ? { timeoutMs } : {}) };
   return {
     createOrder: (order) => request('/v1/orders', { ...opts, method: 'POST', body: { ...base, order } }),
     track: (trackingNumber) => request('/v1/track', { ...opts, method: 'POST', body: { ...base, trackingNumber } }),
     rates: (query) => request('/v1/rates', { ...opts, method: 'POST', body: { ...base, query } }),
+    // Reference data, for building the address form next to the order call.
+    wilayas: (query) => dzship.wilayas(query, opts),
+    communes: (query) => dzship.communes(query, opts),
+    couriers: (query) => dzship.couriers(query, opts),
   };
 }
 
-/** All supported couriers with their required credential fields. No credentials needed. */
-dzship.couriers = (opts) => request('/v1/couriers', opts);
-/** The 58 wilayas (code + FR/AR names). No credentials needed. Cache it — it never changes. */
-dzship.wilayas = (opts) => request('/v1/wilayas', opts);
+/**
+ * Every supported courier with its required credential fields. No credentials needed.
+ *   dzship.couriers()                      every courier
+ *   dzship.couriers({ platform: 'ecotrack' })
+ *   dzship.couriers({ q: 'rocket' })       search key, name and known aliases
+ */
+dzship.couriers = (query, opts) => {
+  const a = splitArgs(query, opts);
+  return request('/v1/couriers' + referenceQuery(a.query), a.opts);
+};
+
+/**
+ * Wilayas. No credentials needed — and cacheable, so cache it.
+ *   dzship.wilayas()              the 58 wilayas couriers deliver to
+ *   dzship.wilayas(16)            one wilaya
+ *   dzship.wilayas('oran')        search, French or Arabic
+ *   dzship.wilayas({ all: true }) all 69 of the 2026 division, each with shipAs
+ */
+dzship.wilayas = (query, opts) => {
+  const a = splitArgs(query, opts);
+  return request('/v1/wilayas' + referenceQuery(a.query), a.opts);
+};
+
+/**
+ * Communes, in the spelling courier APIs expect.
+ *   dzship.communes()             all 1,541
+ *   dzship.communes(16)           the communes of one wilaya
+ *   dzship.communes({ q: 'bab', wilaya: 16 })
+ */
+dzship.communes = (query, opts) => {
+  const a = splitArgs(query, opts);
+  return request('/v1/communes' + referenceQuery(a.query), a.opts);
+};
+
 /** Gateway liveness probe. */
 dzship.health = (opts) => request('/health', opts);
 

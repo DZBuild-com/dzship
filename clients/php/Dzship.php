@@ -52,10 +52,11 @@ class Dzship
 
     /**
      * @param string $courier     courier key, e.g. 'yalidine' — see Dzship::couriers()
-     * @param array  $credentials your own courier account credentials (sent per request, never stored)
+     * @param array  $credentials your own courier account credentials (sent per request, never
+     *                            stored). Empty for the 'sandbox' courier, which needs none.
      * @param array  $options     optional adapter tuning: fromWilaya, baseUrl (Ecotrack tenant), timeoutMs
      */
-    public function __construct($courier, array $credentials, array $options = [], $gateway = self::GATEWAY, $timeout = 30)
+    public function __construct($courier, array $credentials = [], array $options = [], $gateway = self::GATEWAY, $timeout = 30)
     {
         $this->courier = $courier;
         $this->credentials = $credentials;
@@ -82,24 +83,85 @@ class Dzship
         return $this->post('/v1/rates', ['query' => $query]);
     }
 
-    /** All supported couriers with their required credential fields. No credentials needed. */
-    public static function couriers($gateway = self::GATEWAY)
+    /**
+     * Every supported courier with its required credential fields. No credentials needed.
+     *
+     *   Dzship::couriers();                          // all of them
+     *   Dzship::couriers(['platform' => 'ecotrack']);
+     *   Dzship::couriers(['q' => 'rocket']);         // search name, key and aliases
+     *
+     * @param array|string|null $query
+     */
+    public static function couriers($query = null, $gateway = self::GATEWAY)
     {
-        return self::request('GET', rtrim($gateway, '/') . '/v1/couriers', null, 30);
+        return self::reference('/v1/couriers', $query, $gateway);
     }
 
-    /** The 58 wilayas (code + FR/AR names). Cache it — it never changes. */
-    public static function wilayas($gateway = self::GATEWAY)
+    /**
+     * Wilayas. Cacheable — cache it.
+     *
+     *   Dzship::wilayas();                  // the 58 wilayas couriers deliver to
+     *   Dzship::wilayas(16);                // one wilaya
+     *   Dzship::wilayas('oran');            // search, French or Arabic
+     *   Dzship::wilayas(['all' => true]);   // all 69 of the 2026 division, with shipAs
+     *
+     * @param array|int|string|null $query
+     */
+    public static function wilayas($query = null, $gateway = self::GATEWAY)
     {
-        return self::request('GET', rtrim($gateway, '/') . '/v1/wilayas', null, 30);
+        return self::reference('/v1/wilayas', $query, $gateway);
+    }
+
+    /**
+     * Communes, in the spelling courier APIs expect.
+     *
+     *   Dzship::communes();                              // all 1,541
+     *   Dzship::communes(16);                            // one wilaya
+     *   Dzship::communes(['q' => 'bab', 'wilaya' => 16]);
+     *
+     * @param array|int|string|null $query
+     */
+    public static function communes($query = null, $gateway = self::GATEWAY)
+    {
+        return self::reference('/v1/communes', $query, $gateway);
+    }
+
+    /** Build the query string the reference endpoints understand, then fetch. */
+    private static function reference($path, $query, $gateway)
+    {
+        $qs = '';
+        if (is_int($query)) {
+            $qs = '?' . $query;                      // ?16 — the shorthand the API takes
+        } elseif (is_string($query) && $query !== '') {
+            $qs = '?q=' . rawurlencode($query);
+        } elseif (is_array($query) && $query) {
+            $parts = array();
+            foreach (array('code', 'wilaya', 'q', 'platform') as $k) {
+                if (isset($query[$k]) && $query[$k] !== '') {
+                    $parts[] = $k . '=' . rawurlencode($query[$k]);
+                }
+            }
+            if (!empty($query['all'])) {
+                $parts[] = 'all=1';
+            }
+            if ($parts) {
+                $qs = '?' . implode('&', $parts);
+            }
+        }
+
+        return self::request('GET', rtrim($gateway, '/') . $path . $qs, null, 30);
     }
 
     private function post($path, array $extra)
     {
-        $body = array_merge([
-            'courier' => $this->courier,
-            'credentials' => $this->credentials,
-        ], $this->options ? ['options' => $this->options] : [], $extra);
+        // An empty PHP array encodes as [] rather than {}, and the sandbox courier needs
+        // no credentials at all — so the key is left out entirely when there are none.
+        $body = array_merge(
+            ['courier' => $this->courier],
+            $this->credentials ? ['credentials' => (object) $this->credentials] : [],
+            $this->options ? ['options' => (object) $this->options] : [],
+            $extra
+        );
 
         return self::request('POST', $this->gateway . $path, $body, $this->timeout);
     }

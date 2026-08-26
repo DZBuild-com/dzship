@@ -20,6 +20,7 @@ Docs: https://freeship.dzbuild.com · guides: https://github.com/DZBuild-com/dzs
 
 import json
 import urllib.error
+import urllib.parse
 import urllib.request
 
 GATEWAY = "https://freeship.dzbuild.com"
@@ -81,12 +82,13 @@ class Dzship:
     Args:
         courier: courier key, e.g. "yalidine" — see :func:`couriers`.
         credentials: your own courier account credentials (sent per request,
-            never stored by the gateway).
+            never stored by the gateway). Omit for the "sandbox" courier,
+            which needs none.
         options: optional adapter tuning — fromWilaya, baseUrl (Ecotrack
             tenant URL), timeoutMs.
     """
 
-    def __init__(self, courier, credentials, options=None, gateway=GATEWAY, timeout=30):
+    def __init__(self, courier, credentials=None, options=None, gateway=GATEWAY, timeout=30):
         self.courier = courier
         self.credentials = credentials
         self.options = options
@@ -106,18 +108,68 @@ class Dzship:
         return self._post("/v1/rates", {"query": query})
 
     def _post(self, path, extra):
-        body = {"courier": self.courier, "credentials": self.credentials}
+        # The sandbox courier takes no credentials; every other one names what it needs.
+        body = {"courier": self.courier}
+        if self.credentials:
+            body["credentials"] = self.credentials
         if self.options:
             body["options"] = self.options
         body.update(extra)
         return _request("POST", self.gateway + path, body, self.timeout)
 
 
-def couriers(gateway=GATEWAY):
-    """All supported couriers with their required credential fields. No credentials needed."""
-    return _request("GET", gateway.rstrip("/") + "/v1/couriers")
+def _quote(value):
+    return urllib.parse.quote(str(value), safe="")
 
 
-def wilayas(gateway=GATEWAY):
-    """The 58 wilayas (code + FR/AR names). Cache it — it never changes."""
-    return _request("GET", gateway.rstrip("/") + "/v1/wilayas")
+def _reference(path, query, gateway):
+    """Build the query string the reference endpoints understand, then fetch."""
+    qs = ""
+    if isinstance(query, bool):
+        qs = ""
+    elif isinstance(query, int):
+        qs = "?%d" % query                       # ?16 — the shorthand the API takes
+    elif isinstance(query, str) and query:
+        qs = "?q=" + _quote(query)
+    elif isinstance(query, dict) and query:
+        parts = []
+        for key in ("code", "wilaya", "q", "platform"):
+            value = query.get(key)
+            if value not in (None, ""):
+                parts.append("%s=%s" % (key, _quote(str(value))))
+        if query.get("all"):
+            parts.append("all=1")
+        if parts:
+            qs = "?" + "&".join(parts)
+    return _request("GET", gateway.rstrip("/") + path + qs)
+
+
+def couriers(query=None, gateway=GATEWAY):
+    """Every supported courier with its required credential fields. No credentials needed.
+
+    couriers()                          -> all of them
+    couriers({"platform": "ecotrack"})  -> one family
+    couriers("rocket")                  -> search name, key and aliases
+    """
+    return _reference("/v1/couriers", query, gateway)
+
+
+def wilayas(query=None, gateway=GATEWAY):
+    """Wilayas. Cacheable — cache it.
+
+    wilayas()              -> the 58 wilayas couriers deliver to
+    wilayas(16)            -> one wilaya
+    wilayas("oran")        -> search, French or Arabic
+    wilayas({"all": True}) -> all 69 of the 2026 division, each with shipAs
+    """
+    return _reference("/v1/wilayas", query, gateway)
+
+
+def communes(query=None, gateway=GATEWAY):
+    """Communes, in the spelling courier APIs expect.
+
+    communes()                            -> all 1,541
+    communes(16)                          -> one wilaya
+    communes({"q": "bab", "wilaya": 16})  -> search inside a wilaya
+    """
+    return _reference("/v1/communes", query, gateway)
