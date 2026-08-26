@@ -15,6 +15,9 @@ Ready to use, in [`data/`](../data/):
 | [`data/wilayas.json`](../data/wilayas.json) | All **58 wilayas**: code, French name, Arabic name, accent-free name, commune count |
 | [`data/communes.json`](../data/communes.json) | All **1,541 communes**: wilaya code, French name, Arabic name |
 | [`data/communes.csv`](../data/communes.csv) | Same communes as CSV (UTF-8 with BOM, opens clean in Excel) |
+| [`data/wilayas-2026.json`](../data/wilayas-2026.json) | All **69 wilayas** of the 2026 division, each flagged `courierSupported` with the code to `shipAs` |
+| [`data/new-wilayas-2026.json`](../data/new-wilayas-2026.json) | The **11 new wilayas** (59–69) with the 108 communes transferred into them |
+| [`data/communes-moved-2026.csv`](../data/communes-moved-2026.csv) | The same 108 communes as a flat old-code → new-code join |
 
 Fetch them raw, no key needed:
 
@@ -22,6 +25,8 @@ Fetch them raw, no key needed:
 https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/wilayas.json
 https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.json
 https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.csv
+https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/wilayas-2026.json
+https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/new-wilayas-2026.json
 ```
 
 Record shapes:
@@ -34,10 +39,68 @@ Record shapes:
 { "wilayaCode": 16, "name": "Bab Ezzouar", "nameAr": "باب الزوار" }
 ```
 
-The list reflects the **58-wilaya division in force since 2021** — 1,541
-communes total. If your source still says 48 wilayas, it predates the split and
-will misroute the ten new southern wilayas (codes 49–58, carved out of Adrar,
-Biskra, Béchar, Tamanrasset, Ouargla, El Oued and Ghardaïa).
+`wilayas.json` holds the **58 wilayas couriers actually deliver to**. If your
+source still says 48, it predates the 2019 split and will misroute the ten
+southern wilayas (codes 49–58, carved out of Adrar, Biskra, Béchar,
+Tamanrasset, Ouargla, El Oued and Ghardaïa). If your source says 69, read the
+next section before you use it.
+
+## 2026: Algeria has 69 wilayas. Ship to 58 anyway.
+
+On 4 April 2026, [loi n° 26-06](https://www.joradp.dz/FTP/jo-francais/2026/F2026025.pdf)
+(JO n° 25) redrew the map: *« le nouveau découpage territorial du pays comprend
+soixante-neuf (69) wilayas et mille cinq cent quarante-et-une (1541)
+communes »*. Eleven administrative districts became full wilayas, and
+[décret présidentiel n° 26-206](https://www.joradp.dz/FTP/jo-francais/2026/F2026040.pdf)
+(JO n° 40, 3 June 2026) gave them the codes 59 to 69.
+
+**No courier accepts a code above 58.** Not one — Yalidine, ZR Express, Maystro,
+NOEST and every Ecotrack tenant still sync 58 wilayas months after the law. The
+same law explains why: article 54 keeps the *wilayas mères* running the new
+territories until the handover completes, with a deadline of 31 December 2026.
+Send `wilayaCode: 60` today and the parcel is rejected.
+
+So the split in this repo is deliberate:
+
+| You want | Use |
+|---|---|
+| A wilaya list your checkout can ship from | `data/wilayas.json` — the 58 |
+| The current administrative division | `data/wilayas-2026.json` — all 69, each with `courierSupported` and `shipAs` |
+| Which communes moved where | `data/new-wilayas-2026.json` or the CSV |
+
+The new wilayas, their parents, and how many communes moved:
+
+| Code | Wilaya | الولاية | Carved from | Communes |
+|---:|---|---|---|---:|
+| 59 | Aflou | أفلو | 3 Laghouat | 12 |
+| 60 | Barika | بريكة | 5 Batna | 8 |
+| 61 | El Kantara | القنطرة | 7 Biskra | 5 |
+| 62 | Bir El Ater | بئر العاتر | 12 Tébessa | 4 |
+| 63 | El Aricha | العريشة | 13 Tlemcen | 4 |
+| 64 | Ksar Chellala | قصر الشلالة | 14 Tiaret | 6 |
+| 65 | Aïn Ouessara | عين وسارة | 17 Djelfa | 10 |
+| 66 | Messaad | مسعد | 17 Djelfa | 8 |
+| 67 | Ksar El Boukhari | قصر البخاري | 26 Médéa | 21 |
+| 68 | Bou Saâda | بوسعادة | 28 M'Sila | 23 |
+| 69 | El Abiodh Sidi Cheikh | الأبيض سيدي الشيخ | 32 El Bayadh | 7 |
+
+108 communes changed wilaya. The national total did not change: still 1,541.
+
+If you want to show the new names in your address form — customers in Bou Saâda
+now say they live in Bou Saâda, not M'Sila — show the new wilaya and send its
+`shipAs` code to the courier:
+
+```js
+const w = await fetch("https://freeship.dzbuild.com/v1/wilayas?68").then(r => r.json());
+// { code: 68, nameFr: "Bou Saâda", courierSupported: false, shipAs: 28, communeCount: 23 }
+
+order.recipient.wilayaCode = w.courierSupported ? w.code : w.shipAs; // 28
+```
+
+One more trap: the *Journal Officiel* spells some communes differently from the
+courier lists (`Aïn Ouessara` in the gazette, `Ain Oussera` in every courier's
+database; `Boughezoul` vs `Boughzoul`). The dataset carries the courier spelling
+in `name` and the gazette spelling in `gazetteName` — send `name`.
 
 ## Wilaya code vs wilaya name
 
@@ -125,6 +188,8 @@ quote it from the wilaya code, never from a flat rate.
 - [Choosing a courier](choosing-a-courier.md) — coverage per network; not every
   courier serves every wilaya from every origin.
 - [Delivery statuses](statuses.md) — what happens after the parcel is created.
-- The hosted API also exposes `GET /v1/wilayas` at
-  [freeship.dzbuild.com](https://freeship.dzbuild.com) if you'd rather not
-  vendor the file.
+- The hosted API serves the same data if you'd rather not vendor the files:
+  `GET /v1/wilayas` (the 58), `?all=1` (all 69), `?16` (one), `?q=oran`
+  (search), and `GET /v1/communes?16` (the communes of a wilaya) at
+  [freeship.dzbuild.com](https://freeship.dzbuild.com). All of it is cacheable
+  and needs no key.

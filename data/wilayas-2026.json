@@ -1,0 +1,576 @@
+[
+  {
+    "code": 1,
+    "name": "Adrar",
+    "nameAr": "أدرار",
+    "nameAscii": "Adrar",
+    "communeCount": 16,
+    "courierSupported": true
+  },
+  {
+    "code": 2,
+    "name": "Chlef",
+    "nameAr": "الشلف",
+    "nameAscii": "Chlef",
+    "communeCount": 35,
+    "courierSupported": true
+  },
+  {
+    "code": 3,
+    "name": "Laghouat",
+    "nameAr": "الأغواط",
+    "nameAscii": "Laghouat",
+    "communeCount": 24,
+    "courierSupported": true
+  },
+  {
+    "code": 4,
+    "name": "Oum El Bouaghi",
+    "nameAr": "أم البواقي",
+    "nameAscii": "Oum El Bouaghi",
+    "communeCount": 29,
+    "courierSupported": true
+  },
+  {
+    "code": 5,
+    "name": "Batna",
+    "nameAr": "باتنة",
+    "nameAscii": "Batna",
+    "communeCount": 61,
+    "courierSupported": true
+  },
+  {
+    "code": 6,
+    "name": "Béjaïa",
+    "nameAr": "بجاية",
+    "nameAscii": "Bejaia",
+    "communeCount": 52,
+    "courierSupported": true
+  },
+  {
+    "code": 7,
+    "name": "Biskra",
+    "nameAr": "بسكرة",
+    "nameAscii": "Biskra",
+    "communeCount": 27,
+    "courierSupported": true
+  },
+  {
+    "code": 8,
+    "name": "Béchar",
+    "nameAr": "بشار",
+    "nameAscii": "Bechar",
+    "communeCount": 11,
+    "courierSupported": true
+  },
+  {
+    "code": 9,
+    "name": "Blida",
+    "nameAr": "البليدة",
+    "nameAscii": "Blida",
+    "communeCount": 25,
+    "courierSupported": true
+  },
+  {
+    "code": 10,
+    "name": "Bouira",
+    "nameAr": "البويرة",
+    "nameAscii": "Bouira",
+    "communeCount": 45,
+    "courierSupported": true
+  },
+  {
+    "code": 11,
+    "name": "Tamanrasset",
+    "nameAr": "تمنراست",
+    "nameAscii": "Tamanrasset",
+    "communeCount": 5,
+    "courierSupported": true
+  },
+  {
+    "code": 12,
+    "name": "Tébessa",
+    "nameAr": "تبسة",
+    "nameAscii": "Tebessa",
+    "communeCount": 28,
+    "courierSupported": true
+  },
+  {
+    "code": 13,
+    "name": "Tlemcen",
+    "nameAr": "تلمسان",
+    "nameAscii": "Tlemcen",
+    "communeCount": 53,
+    "courierSupported": true
+  },
+  {
+    "code": 14,
+    "name": "Tiaret",
+    "nameAr": "تيارت",
+    "nameAscii": "Tiaret",
+    "communeCount": 42,
+    "courierSupported": true
+  },
+  {
+    "code": 15,
+    "name": "Tizi Ouzou",
+    "nameAr": "تيزي وزو",
+    "nameAscii": "Tizi Ouzou",
+    "communeCount": 67,
+    "courierSupported": true
+  },
+  {
+    "code": 16,
+    "name": "Alger",
+    "nameAr": "الجزائر",
+    "nameAscii": "Alger",
+    "communeCount": 57,
+    "courierSupported": true
+  },
+  {
+    "code": 17,
+    "name": "Djelfa",
+    "nameAr": "الجلفة",
+    "nameAscii": "Djelfa",
+    "communeCount": 36,
+    "courierSupported": true
+  },
+  {
+    "code": 18,
+    "name": "Jijel",
+    "nameAr": "جيجل",
+    "nameAscii": "Jijel",
+    "communeCount": 28,
+    "courierSupported": true
+  },
+  {
+    "code": 19,
+    "name": "Sétif",
+    "nameAr": "سطيف",
+    "nameAscii": "Setif",
+    "communeCount": 60,
+    "courierSupported": true
+  },
+  {
+    "code": 20,
+    "name": "Saïda",
+    "nameAr": "سعيدة",
+    "nameAscii": "Saida",
+    "communeCount": 16,
+    "courierSupported": true
+  },
+  {
+    "code": 21,
+    "name": "Skikda",
+    "nameAr": "سكيكدة",
+    "nameAscii": "Skikda",
+    "communeCount": 38,
+    "courierSupported": true
+  },
+  {
+    "code": 22,
+    "name": "Sidi Bel Abbès",
+    "nameAr": "سيدي بلعباس",
+    "nameAscii": "Sidi Bel Abbes",
+    "communeCount": 52,
+    "courierSupported": true
+  },
+  {
+    "code": 23,
+    "name": "Annaba",
+    "nameAr": "عنابة",
+    "nameAscii": "Annaba",
+    "communeCount": 12,
+    "courierSupported": true
+  },
+  {
+    "code": 24,
+    "name": "Guelma",
+    "nameAr": "قالمة",
+    "nameAscii": "Guelma",
+    "communeCount": 34,
+    "courierSupported": true
+  },
+  {
+    "code": 25,
+    "name": "Constantine",
+    "nameAr": "قسنطينة",
+    "nameAscii": "Constantine",
+    "communeCount": 12,
+    "courierSupported": true
+  },
+  {
+    "code": 26,
+    "name": "Médéa",
+    "nameAr": "المدية",
+    "nameAscii": "Medea",
+    "communeCount": 64,
+    "courierSupported": true
+  },
+  {
+    "code": 27,
+    "name": "Mostaganem",
+    "nameAr": "مستغانم",
+    "nameAscii": "Mostaganem",
+    "communeCount": 32,
+    "courierSupported": true
+  },
+  {
+    "code": 28,
+    "name": "M'Sila",
+    "nameAr": "المسيلة",
+    "nameAscii": "M'Sila",
+    "communeCount": 47,
+    "courierSupported": true
+  },
+  {
+    "code": 29,
+    "name": "Mascara",
+    "nameAr": "معسكر",
+    "nameAscii": "Mascara",
+    "communeCount": 47,
+    "courierSupported": true
+  },
+  {
+    "code": 30,
+    "name": "Ouargla",
+    "nameAr": "ورقلة",
+    "nameAscii": "Ouargla",
+    "communeCount": 8,
+    "courierSupported": true
+  },
+  {
+    "code": 31,
+    "name": "Oran",
+    "nameAr": "وهران",
+    "nameAscii": "Oran",
+    "communeCount": 26,
+    "courierSupported": true
+  },
+  {
+    "code": 32,
+    "name": "El Bayadh",
+    "nameAr": "البيض",
+    "nameAscii": "El Bayadh",
+    "communeCount": 22,
+    "courierSupported": true
+  },
+  {
+    "code": 33,
+    "name": "Illizi",
+    "nameAr": "إليزي",
+    "nameAscii": "Illizi",
+    "communeCount": 4,
+    "courierSupported": true
+  },
+  {
+    "code": 34,
+    "name": "Bordj Bou Arréridj",
+    "nameAr": "برج بوعريريج",
+    "nameAscii": "Bordj Bou Arreridj",
+    "communeCount": 34,
+    "courierSupported": true
+  },
+  {
+    "code": 35,
+    "name": "Boumerdès",
+    "nameAr": "بومرداس",
+    "nameAscii": "Boumerdes",
+    "communeCount": 32,
+    "courierSupported": true
+  },
+  {
+    "code": 36,
+    "name": "El Tarf",
+    "nameAr": "الطارف",
+    "nameAscii": "El Tarf",
+    "communeCount": 24,
+    "courierSupported": true
+  },
+  {
+    "code": 37,
+    "name": "Tindouf",
+    "nameAr": "تندوف",
+    "nameAscii": "Tindouf",
+    "communeCount": 2,
+    "courierSupported": true
+  },
+  {
+    "code": 38,
+    "name": "Tissemsilt",
+    "nameAr": "تيسمسيلت",
+    "nameAscii": "Tissemsilt",
+    "communeCount": 22,
+    "courierSupported": true
+  },
+  {
+    "code": 39,
+    "name": "El Oued",
+    "nameAr": "الوادي",
+    "nameAscii": "El Oued",
+    "communeCount": 22,
+    "courierSupported": true
+  },
+  {
+    "code": 40,
+    "name": "Khenchela",
+    "nameAr": "خنشلة",
+    "nameAscii": "Khenchela",
+    "communeCount": 21,
+    "courierSupported": true
+  },
+  {
+    "code": 41,
+    "name": "Souk Ahras",
+    "nameAr": "سوق أهراس",
+    "nameAscii": "Souk Ahras",
+    "communeCount": 26,
+    "courierSupported": true
+  },
+  {
+    "code": 42,
+    "name": "Tipaza",
+    "nameAr": "تيبازة",
+    "nameAscii": "Tipaza",
+    "communeCount": 28,
+    "courierSupported": true
+  },
+  {
+    "code": 43,
+    "name": "Mila",
+    "nameAr": "ميلة",
+    "nameAscii": "Mila",
+    "communeCount": 32,
+    "courierSupported": true
+  },
+  {
+    "code": 44,
+    "name": "Aïn Defla",
+    "nameAr": "عين الدفلى",
+    "nameAscii": "Ain Defla",
+    "communeCount": 36,
+    "courierSupported": true
+  },
+  {
+    "code": 45,
+    "name": "Naâma",
+    "nameAr": "النعامة",
+    "nameAscii": "Naama",
+    "communeCount": 12,
+    "courierSupported": true
+  },
+  {
+    "code": 46,
+    "name": "Aïn Témouchent",
+    "nameAr": "عين تموشنت",
+    "nameAscii": "Ain Temouchent",
+    "communeCount": 28,
+    "courierSupported": true
+  },
+  {
+    "code": 47,
+    "name": "Ghardaïa",
+    "nameAr": "غرداية",
+    "nameAscii": "Ghardaia",
+    "communeCount": 10,
+    "courierSupported": true
+  },
+  {
+    "code": 48,
+    "name": "Relizane",
+    "nameAr": "غليزان",
+    "nameAscii": "Relizane",
+    "communeCount": 38,
+    "courierSupported": true
+  },
+  {
+    "code": 49,
+    "name": "Timimoun",
+    "nameAr": "تيميمون",
+    "nameAscii": "Timimoun",
+    "communeCount": 10,
+    "courierSupported": true
+  },
+  {
+    "code": 50,
+    "name": "Bordj Badji Mokhtar",
+    "nameAr": "برج باجي مختار",
+    "nameAscii": "Bordj Badji Mokhtar",
+    "communeCount": 2,
+    "courierSupported": true
+  },
+  {
+    "code": 51,
+    "name": "Ouled Djellal",
+    "nameAr": "أولاد جلال",
+    "nameAscii": "Ouled Djellal",
+    "communeCount": 6,
+    "courierSupported": true
+  },
+  {
+    "code": 52,
+    "name": "Béni Abbès",
+    "nameAr": "بني عباس",
+    "nameAscii": "Beni Abbes",
+    "communeCount": 10,
+    "courierSupported": true
+  },
+  {
+    "code": 53,
+    "name": "In Salah",
+    "nameAr": "عين صالح",
+    "nameAscii": "In Salah",
+    "communeCount": 3,
+    "courierSupported": true
+  },
+  {
+    "code": 54,
+    "name": "In Guezzam",
+    "nameAr": "عين قزام",
+    "nameAscii": "In Guezzam",
+    "communeCount": 2,
+    "courierSupported": true
+  },
+  {
+    "code": 55,
+    "name": "Touggourt",
+    "nameAr": "تقرت",
+    "nameAscii": "Touggourt",
+    "communeCount": 13,
+    "courierSupported": true
+  },
+  {
+    "code": 56,
+    "name": "Djanet",
+    "nameAr": "جانت",
+    "nameAscii": "Djanet",
+    "communeCount": 2,
+    "courierSupported": true
+  },
+  {
+    "code": 57,
+    "name": "El M'Ghair",
+    "nameAr": "المغير",
+    "nameAscii": "El M'Ghair",
+    "communeCount": 8,
+    "courierSupported": true
+  },
+  {
+    "code": 58,
+    "name": "El Meniaa",
+    "nameAr": "المنيعة",
+    "nameAscii": "El Meniaa",
+    "communeCount": 3,
+    "courierSupported": true
+  },
+  {
+    "code": 59,
+    "name": "Aflou",
+    "nameAr": "أفلو",
+    "nameAscii": "Aflou",
+    "communeCount": 12,
+    "courierSupported": false,
+    "shipAs": 3,
+    "shipAsName": "Laghouat"
+  },
+  {
+    "code": 60,
+    "name": "Barika",
+    "nameAr": "بريكة",
+    "nameAscii": "Barika",
+    "communeCount": 8,
+    "courierSupported": false,
+    "shipAs": 5,
+    "shipAsName": "Batna"
+  },
+  {
+    "code": 61,
+    "name": "El Kantara",
+    "nameAr": "القنطرة",
+    "nameAscii": "El Kantara",
+    "communeCount": 5,
+    "courierSupported": false,
+    "shipAs": 7,
+    "shipAsName": "Biskra"
+  },
+  {
+    "code": 62,
+    "name": "Bir El Ater",
+    "nameAr": "بئر العاتر",
+    "nameAscii": "Bir El Ater",
+    "communeCount": 4,
+    "courierSupported": false,
+    "shipAs": 12,
+    "shipAsName": "Tébessa"
+  },
+  {
+    "code": 63,
+    "name": "El Aricha",
+    "nameAr": "العريشة",
+    "nameAscii": "El Aricha",
+    "communeCount": 4,
+    "courierSupported": false,
+    "shipAs": 13,
+    "shipAsName": "Tlemcen"
+  },
+  {
+    "code": 64,
+    "name": "Ksar Chellala",
+    "nameAr": "قصر الشلالة",
+    "nameAscii": "Ksar Chellala",
+    "communeCount": 6,
+    "courierSupported": false,
+    "shipAs": 14,
+    "shipAsName": "Tiaret"
+  },
+  {
+    "code": 65,
+    "name": "Aïn Ouessara",
+    "nameAr": "عين وسارة",
+    "nameAscii": "Ain Ouessara",
+    "communeCount": 10,
+    "courierSupported": false,
+    "shipAs": 17,
+    "shipAsName": "Djelfa"
+  },
+  {
+    "code": 66,
+    "name": "Messaad",
+    "nameAr": "مسعد",
+    "nameAscii": "Messaad",
+    "communeCount": 8,
+    "courierSupported": false,
+    "shipAs": 17,
+    "shipAsName": "Djelfa"
+  },
+  {
+    "code": 67,
+    "name": "Ksar El Boukhari",
+    "nameAr": "قصر البخاري",
+    "nameAscii": "Ksar El Boukhari",
+    "communeCount": 21,
+    "courierSupported": false,
+    "shipAs": 26,
+    "shipAsName": "Médéa"
+  },
+  {
+    "code": 68,
+    "name": "Bou Saâda",
+    "nameAr": "بوسعادة",
+    "nameAscii": "Bou Saada",
+    "communeCount": 23,
+    "courierSupported": false,
+    "shipAs": 28,
+    "shipAsName": "M'Sila"
+  },
+  {
+    "code": 69,
+    "name": "El Abiodh Sidi Cheikh",
+    "nameAr": "الأبيض سيدي الشيخ",
+    "nameAscii": "El Abiodh Sidi Cheikh",
+    "communeCount": 7,
+    "courierSupported": false,
+    "shipAs": 32,
+    "shipAsName": "El Bayadh"
+  }
+]

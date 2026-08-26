@@ -1,0 +1,585 @@
+[
+  {
+    "code": 59,
+    "name": "Aflou",
+    "nameAr": "أفلو",
+    "nameAscii": "Aflou",
+    "shipAs": 3,
+    "shipAsName": "Laghouat",
+    "isDeepSouth": false,
+    "communeCount": 12,
+    "communes": [
+      {
+        "name": "Aflou",
+        "nameAr": "أفلو"
+      },
+      {
+        "name": "Gueltat Sidi Saad",
+        "nameAr": "قلتة سيدي سعد"
+      },
+      {
+        "name": "Ain Sidi Ali",
+        "nameAr": "عين سيدي علي"
+      },
+      {
+        "name": "El Beidha",
+        "nameAr": "البيضاء"
+      },
+      {
+        "name": "Brida",
+        "nameAr": "بريدة"
+      },
+      {
+        "name": "El Ghicha",
+        "nameAr": "الغيشة"
+      },
+      {
+        "name": "Hadj Mechri",
+        "nameAr": "الحاج مشري"
+      },
+      {
+        "name": "Sebgag",
+        "nameAr": "سبقاق"
+      },
+      {
+        "name": "Taouiala",
+        "nameAr": "تاويالة"
+      },
+      {
+        "name": "Oued Morra",
+        "nameAr": "وادي مرة"
+      },
+      {
+        "name": "Oued M'Zi",
+        "nameAr": "وادي مزي"
+      },
+      {
+        "name": "Sidi Bouzid",
+        "nameAr": "سيدي بوزيد"
+      }
+    ]
+  },
+  {
+    "code": 60,
+    "name": "Barika",
+    "nameAr": "بريكة",
+    "nameAscii": "Barika",
+    "shipAs": 5,
+    "shipAsName": "Batna",
+    "isDeepSouth": false,
+    "communeCount": 8,
+    "communes": [
+      {
+        "name": "Barika",
+        "nameAr": "بريكة"
+      },
+      {
+        "name": "Bitam",
+        "nameAr": "بيطام"
+      },
+      {
+        "name": "Azil Abedelkader",
+        "nameAr": "عزيل عبد القادر",
+        "gazetteName": "Abdelkader Azil"
+      },
+      {
+        "name": "Tilatou",
+        "nameAr": "تيلاطو"
+      },
+      {
+        "name": "Seggana",
+        "nameAr": "سقانة"
+      },
+      {
+        "name": "Djezzar",
+        "nameAr": "الجزار"
+      },
+      {
+        "name": "M Doukal",
+        "nameAr": "إمدوكل"
+      },
+      {
+        "name": "Ouled Ammar",
+        "nameAr": "أولاد عمار"
+      }
+    ]
+  },
+  {
+    "code": 61,
+    "name": "El Kantara",
+    "nameAr": "القنطرة",
+    "nameAscii": "El Kantara",
+    "shipAs": 7,
+    "shipAsName": "Biskra",
+    "isDeepSouth": false,
+    "communeCount": 5,
+    "communes": [
+      {
+        "name": "El Kantara",
+        "nameAr": "القنطرة"
+      },
+      {
+        "name": "Ain Zaatout",
+        "nameAr": "عين زعطوط"
+      },
+      {
+        "name": "Branis",
+        "nameAr": "برانيس"
+      },
+      {
+        "name": "El Outaya",
+        "nameAr": "الوطاية"
+      },
+      {
+        "name": "Djemorah",
+        "nameAr": "جمورة",
+        "gazetteName": "Djemourah"
+      }
+    ]
+  },
+  {
+    "code": 62,
+    "name": "Bir El Ater",
+    "nameAr": "بئر العاتر",
+    "nameAscii": "Bir El Ater",
+    "shipAs": 12,
+    "shipAsName": "Tébessa",
+    "isDeepSouth": false,
+    "communeCount": 4,
+    "communes": [
+      {
+        "name": "Bir-El-Ater",
+        "nameAr": "بئر العاتر"
+      },
+      {
+        "name": "Negrine",
+        "nameAr": "نقرين"
+      },
+      {
+        "name": "El Ogla El Malha",
+        "nameAr": "العقلة المالحة",
+        "gazetteName": "El Ogla El Melha"
+      },
+      {
+        "name": "Ferkane",
+        "nameAr": "فركان"
+      }
+    ]
+  },
+  {
+    "code": 63,
+    "name": "El Aricha",
+    "nameAr": "العريشة",
+    "nameAscii": "El Aricha",
+    "shipAs": 13,
+    "shipAsName": "Tlemcen",
+    "isDeepSouth": false,
+    "communeCount": 4,
+    "communes": [
+      {
+        "name": "El Aricha",
+        "nameAr": "العريشة"
+      },
+      {
+        "name": "El Gor",
+        "nameAr": "القور"
+      },
+      {
+        "name": "Sidi Djillali",
+        "nameAr": "سيدي الجيلالي"
+      },
+      {
+        "name": "Bouihi",
+        "nameAr": "البويهي",
+        "gazetteName": "El Bouihi"
+      }
+    ]
+  },
+  {
+    "code": 64,
+    "name": "Ksar Chellala",
+    "nameAr": "قصر الشلالة",
+    "nameAscii": "Ksar Chellala",
+    "shipAs": 14,
+    "shipAsName": "Tiaret",
+    "isDeepSouth": false,
+    "communeCount": 6,
+    "communes": [
+      {
+        "name": "Ksar Chellala",
+        "nameAr": "قصر الشلالة"
+      },
+      {
+        "name": "Zmalet El Emir Abdelkade",
+        "nameAr": "زمالة  الأمير عبد القادر",
+        "gazetteName": "Zmalet El Emir Abdelkader"
+      },
+      {
+        "name": "Rechaiga",
+        "nameAr": "الرشايقة"
+      },
+      {
+        "name": "Hamadia",
+        "nameAr": "حمادية"
+      },
+      {
+        "name": "Serghine",
+        "nameAr": "سرغين",
+        "gazetteName": "Serguine"
+      },
+      {
+        "name": "Bougara",
+        "nameAr": "بوقرة"
+      }
+    ]
+  },
+  {
+    "code": 65,
+    "name": "Aïn Ouessara",
+    "nameAr": "عين وسارة",
+    "nameAscii": "Ain Ouessara",
+    "shipAs": 17,
+    "shipAsName": "Djelfa",
+    "isDeepSouth": false,
+    "communeCount": 10,
+    "communes": [
+      {
+        "name": "Ain Oussera",
+        "nameAr": "عين وسارة",
+        "gazetteName": "Aïn Ouessara"
+      },
+      {
+        "name": "Birine",
+        "nameAr": "بيرين"
+      },
+      {
+        "name": "Bouira Lahdab",
+        "nameAr": "بويرة الأحداب"
+      },
+      {
+        "name": "El Khemis",
+        "nameAr": "الخميس"
+      },
+      {
+        "name": "Sidi Laadjel",
+        "nameAr": "سيدي لعجال",
+        "gazetteName": "Sidi Ladjel"
+      },
+      {
+        "name": "Had Sahary",
+        "nameAr": "حد الصحاري"
+      },
+      {
+        "name": "Guernini",
+        "nameAr": "قرنيني"
+      },
+      {
+        "name": "Benhar",
+        "nameAr": "بنهار"
+      },
+      {
+        "name": "Hassi Fedoul",
+        "nameAr": "حاسي فدول"
+      },
+      {
+        "name": "Ain Fekka",
+        "nameAr": "عين فقه"
+      }
+    ]
+  },
+  {
+    "code": 66,
+    "name": "Messaad",
+    "nameAr": "مسعد",
+    "nameAscii": "Messaad",
+    "shipAs": 17,
+    "shipAsName": "Djelfa",
+    "isDeepSouth": false,
+    "communeCount": 8,
+    "communes": [
+      {
+        "name": "Messaad",
+        "nameAr": "مسعد"
+      },
+      {
+        "name": "Sed Rahal",
+        "nameAr": "سد الرحال"
+      },
+      {
+        "name": "Faidh El Botma",
+        "nameAr": "فيض البطمة"
+      },
+      {
+        "name": "Guettara",
+        "nameAr": "قطارة"
+      },
+      {
+        "name": "Selmana",
+        "nameAr": "سلمانة"
+      },
+      {
+        "name": "Oum Laadham",
+        "nameAr": "أم العظام"
+      },
+      {
+        "name": "Deldoul",
+        "nameAr": "دلدول"
+      },
+      {
+        "name": "Amourah",
+        "nameAr": "عمورة"
+      }
+    ]
+  },
+  {
+    "code": 67,
+    "name": "Ksar El Boukhari",
+    "nameAr": "قصر البخاري",
+    "nameAscii": "Ksar El Boukhari",
+    "shipAs": 26,
+    "shipAsName": "Médéa",
+    "isDeepSouth": false,
+    "communeCount": 21,
+    "communes": [
+      {
+        "name": "Ksar El Boukhari",
+        "nameAr": "قصر البخاري"
+      },
+      {
+        "name": "Ouled Emaaraf",
+        "nameAr": "أولاد امعرف",
+        "gazetteName": "Ouled Maaref"
+      },
+      {
+        "name": "Ain Boucif",
+        "nameAr": "عين بوسيف"
+      },
+      {
+        "name": "Derrag",
+        "nameAr": "دراق"
+      },
+      {
+        "name": "Bouaiche",
+        "nameAr": "بوعيش"
+      },
+      {
+        "name": "Kef Lakhdar",
+        "nameAr": "الكاف الاخضر"
+      },
+      {
+        "name": "Chelalet El Adhaoura",
+        "nameAr": "شلالة العذاورة"
+      },
+      {
+        "name": "Ouled Hellal",
+        "nameAr": "أولاد هلال"
+      },
+      {
+        "name": "Tafraout",
+        "nameAr": "تفراوت"
+      },
+      {
+        "name": "Boghar",
+        "nameAr": "بوغار"
+      },
+      {
+        "name": "Sidi Demed",
+        "nameAr": "سيدي دامد",
+        "gazetteName": "Sidi Damed"
+      },
+      {
+        "name": "Aziz",
+        "nameAr": "عزيز"
+      },
+      {
+        "name": "Chabounia",
+        "nameAr": "الشهبونية",
+        "gazetteName": "Chahbounia"
+      },
+      {
+        "name": "Cheniguel",
+        "nameAr": "شنيقل"
+      },
+      {
+        "name": "Ain Ouksir",
+        "nameAr": "عين اقصير"
+      },
+      {
+        "name": "Oum El Djellil",
+        "nameAr": "أم الجليل",
+        "gazetteName": "Oum El Djallil"
+      },
+      {
+        "name": "M'fatha",
+        "nameAr": "مفاتحة"
+      },
+      {
+        "name": "Boughzoul",
+        "nameAr": "بوغزول",
+        "gazetteName": "Boughezoul"
+      },
+      {
+        "name": "El Ouinet",
+        "nameAr": "العوينات"
+      },
+      {
+        "name": "Ouled Antar",
+        "nameAr": "أولاد عنتر"
+      },
+      {
+        "name": "Saneg",
+        "nameAr": "السانق"
+      }
+    ]
+  },
+  {
+    "code": 68,
+    "name": "Bou Saâda",
+    "nameAr": "بوسعادة",
+    "nameAscii": "Bou Saada",
+    "shipAs": 28,
+    "shipAsName": "M'Sila",
+    "isDeepSouth": false,
+    "communeCount": 23,
+    "communes": [
+      {
+        "name": "Bou Saada",
+        "nameAr": "بوسعادة"
+      },
+      {
+        "name": "Khoubana",
+        "nameAr": "خبانة"
+      },
+      {
+        "name": "M'Cif",
+        "nameAr": "مسيف"
+      },
+      {
+        "name": "Ouled Sidi Brahim",
+        "nameAr": "أولاد سيدي ابراهيم"
+      },
+      {
+        "name": "Sidi Ameur",
+        "nameAr": "سيدي عامر"
+      },
+      {
+        "name": "Tamsa",
+        "nameAr": "تامسة"
+      },
+      {
+        "name": "Ben Srour",
+        "nameAr": "بن سرور"
+      },
+      {
+        "name": "Ouled Slimane",
+        "nameAr": "أولاد سليمان"
+      },
+      {
+        "name": "El Houamed",
+        "nameAr": "الحوامد"
+      },
+      {
+        "name": "El Hamel",
+        "nameAr": "الهامل"
+      },
+      {
+        "name": "Zarzour",
+        "nameAr": "زرزور"
+      },
+      {
+        "name": "Mohamed Boudiaf",
+        "nameAr": "محمد بوضياف",
+        "gazetteName": "Mouhamed Boudiaf"
+      },
+      {
+        "name": "Benzouh",
+        "nameAr": "بن زوه"
+      },
+      {
+        "name": "Bir Foda",
+        "nameAr": "بئر فضة"
+      },
+      {
+        "name": "Ain Fares",
+        "nameAr": "عين فارس"
+      },
+      {
+        "name": "Sidi M'Hamed",
+        "nameAr": "سيدي امحمد"
+      },
+      {
+        "name": "Menaa",
+        "nameAr": "مناعة"
+      },
+      {
+        "name": "Ain El Melh",
+        "nameAr": "عين الملح",
+        "gazetteName": "Aïn El Meleh"
+      },
+      {
+        "name": "Medjedel",
+        "nameAr": "امجدل"
+      },
+      {
+        "name": "Slim",
+        "nameAr": "سليم"
+      },
+      {
+        "name": "Ain Rich",
+        "nameAr": "عين الريش",
+        "gazetteName": "Aïn Errich"
+      },
+      {
+        "name": "Oulteme",
+        "nameAr": "ولتام",
+        "gazetteName": "Oultem"
+      },
+      {
+        "name": "Djebel Messaad",
+        "nameAr": "جبل مساعد"
+      }
+    ]
+  },
+  {
+    "code": 69,
+    "name": "El Abiodh Sidi Cheikh",
+    "nameAr": "الأبيض سيدي الشيخ",
+    "nameAscii": "El Abiodh Sidi Cheikh",
+    "shipAs": 32,
+    "shipAsName": "El Bayadh",
+    "isDeepSouth": true,
+    "communeCount": 7,
+    "communes": [
+      {
+        "name": "Labiodh Sidi Cheikh",
+        "nameAr": "الأبيض سيدي الشيخ",
+        "gazetteName": "El Abiodh Sidi Cheikh"
+      },
+      {
+        "name": "Aïn El Orak",
+        "nameAr": "عين العراك"
+      },
+      {
+        "name": "Arbaouat",
+        "nameAr": "اربوات"
+      },
+      {
+        "name": "Boussemghoun",
+        "nameAr": "بوسمغون"
+      },
+      {
+        "name": "Chellala",
+        "nameAr": "شلالة"
+      },
+      {
+        "name": "El Bnoud",
+        "nameAr": "البنود"
+      },
+      {
+        "name": "El Mehara",
+        "nameAr": "المحرة",
+        "gazetteName": "El Meharra"
+      }
+    ]
+  }
+]
