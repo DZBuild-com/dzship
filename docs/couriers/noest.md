@@ -68,5 +68,5 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
   filters this correctly; if you build on raw NOEST events instead, don't
   surface payment events as parcel movement.
 
-Full request/response reference: [dzship API
-docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).
+Full request/response reference: [freeship.dzbuild.com](https://freeship.dzbuild.com),
+or [docs/endpoints.md](../endpoints.md) in this repo.

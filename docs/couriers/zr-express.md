@@ -58,5 +58,5 @@ least one core field name is misspelled *in the API itself* and must be sent
 misspelled forever. This is exactly the category of trivia dzship exists to
 absorb. Send the normalized request above and it comes out right on the wire.
 
-Full request/response reference: [dzship API
-docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).
+Full request/response reference: [freeship.dzbuild.com](https://freeship.dzbuild.com),
+or [docs/endpoints.md](../endpoints.md) in this repo.

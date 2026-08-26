@@ -54,5 +54,5 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
   means delivered.
 - **Cancel and labels**: both available through the API.
 
-Full request/response reference: [dzship API
-docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).
+Full request/response reference: [freeship.dzbuild.com](https://freeship.dzbuild.com),
+or [docs/endpoints.md](../endpoints.md) in this repo.

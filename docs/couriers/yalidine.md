@@ -59,11 +59,22 @@ returns a printable label link at creation, so you don't need a second call.
 - **Commune names** must match Yalidine's French spelling. A misspelled commune
   is the most common creation error across all couriers.
 
-## Yalitec, Guepex, Easy & Speed
+## Yalitec, Guepex, Easy & Speed, Economiqua, We Can
 
-Same platform, different network. Keep `courier: "yalidine"` and point
-`options.baseUrl` at that network's API host; credentials come from that
-network's own dashboard. Everything else in this guide applies unchanged.
+Same API, different delivery network. Each has its own `courier` key — you never
+touch a URL:
+
+| Network | `courier` key |
+|---|---|
+| Yalidine | `yalidine` |
+| Yalitec | `yalitec` |
+| Guepex | `guepex` |
+| Easy & Speed | `easyandspeed` |
+| Economiqua | `economiqua` |
+| We Can Services | `wecan` |
+
+Credentials come from that network's own dashboard, and `apiId` / `apiToken`
+work the same way. Everything else in this guide applies unchanged.
 
 ## Why not call Yalidine's API directly?
 
@@ -74,5 +85,5 @@ build the status mapping and Arabic-text edge cases yourself. The
 production traffic daily, and it's free, so direct integration mostly buys you
 maintenance work.
 
-Full request/response reference: [dzship API
-docs](https://github.com/DZBuild-com/freeship/blob/main/docs/api-reference.md).
+Full request/response reference: [freeship.dzbuild.com](https://freeship.dzbuild.com),
+or [docs/endpoints.md](../endpoints.md) in this repo.
