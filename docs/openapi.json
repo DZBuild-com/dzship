@@ -1,0 +1,974 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "dzship — the free shipping API for Algeria",
+    "version": "1.1.0",
+    "summary": "Create and track cash-on-delivery parcels with 99 Algerian couriers.",
+    "description": "One request shape for every Algerian courier. No signup and no API key: you send your own courier credentials with each call and they are never stored. Try it with courier \"sandbox\", which needs no credentials and creates nothing.",
+    "contact": {
+      "name": "DZBuild",
+      "url": "https://dzbuild.com"
+    },
+    "license": {
+      "name": "Free to use",
+      "url": "https://freeship.dzbuild.com/#limits"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://freeship.dzbuild.com"
+    }
+  ],
+  "externalDocs": {
+    "description": "Guides, datasets and clients",
+    "url": "https://github.com/DZBuild-com/dzship"
+  },
+  "tags": [
+    {
+      "name": "shipping",
+      "description": "Create, track and price parcels"
+    },
+    {
+      "name": "reference",
+      "description": "Couriers, wilayas and communes"
+    }
+  ],
+  "paths": {
+    "/v1/orders": {
+      "post": {
+        "tags": [
+          "shipping"
+        ],
+        "summary": "Create a parcel",
+        "operationId": "createOrder",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "courier",
+                  "order"
+                ],
+                "properties": {
+                  "courier": {
+                    "type": "string",
+                    "example": "yalidine"
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "description": "The caller's own credentials for that courier, 1-8 string fields. Never stored. Omit entirely for the sandbox courier.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "baseUrl": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                      },
+                      "fromWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "timeoutMs": {
+                        "type": "integer",
+                        "minimum": 1000,
+                        "maximum": 30000
+                      }
+                    }
+                  },
+                  "order": {
+                    "type": "object",
+                    "required": [
+                      "recipient",
+                      "deliveryType",
+                      "productList",
+                      "codAmount"
+                    ],
+                    "properties": {
+                      "reference": {
+                        "type": "string",
+                        "maxLength": 64
+                      },
+                      "recipient": {
+                        "type": "object",
+                        "required": [
+                          "fullName",
+                          "phone",
+                          "wilayaCode",
+                          "communeName"
+                        ],
+                        "properties": {
+                          "fullName": {
+                            "type": "string",
+                            "minLength": 2,
+                            "maxLength": 120
+                          },
+                          "phone": {
+                            "type": "string",
+                            "description": "Algerian mobile: 05/06/07"
+                          },
+                          "phoneAlt": {
+                            "type": "string"
+                          },
+                          "wilayaCode": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 58
+                          },
+                          "communeName": {
+                            "type": "string"
+                          },
+                          "addressLine": {
+                            "type": "string",
+                            "maxLength": 255
+                          }
+                        }
+                      },
+                      "deliveryType": {
+                        "type": "string",
+                        "enum": [
+                          "home",
+                          "stopdesk"
+                        ]
+                      },
+                      "stopDeskId": {
+                        "type": "string"
+                      },
+                      "productList": {
+                        "type": "string",
+                        "maxLength": 500
+                      },
+                      "codAmount": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "description": "Integer DZD"
+                      },
+                      "weightKg": {
+                        "type": "number"
+                      },
+                      "declaredValue": {
+                        "type": "integer"
+                      },
+                      "freeShipping": {
+                        "type": "boolean"
+                      },
+                      "isExchange": {
+                        "type": "boolean"
+                      },
+                      "hasOpenPackage": {
+                        "type": "boolean"
+                      },
+                      "notes": {
+                        "type": "string",
+                        "maxLength": 255
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The parcel exists on your courier account",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "trackingNumber",
+                    "status",
+                    "reference"
+                  ],
+                  "properties": {
+                    "trackingNumber": {
+                      "type": "string"
+                    },
+                    "courierReference": {
+                      "type": "string"
+                    },
+                    "labelUrl": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "reference": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation, configuration or blocked-egress error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "The phone is not an Algerian mobile, or the courier refused",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited — wait Retry-After seconds",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "The courier rejected the parcel or could not be reached",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Momentary capacity guard",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/track": {
+      "post": {
+        "tags": [
+          "shipping"
+        ],
+        "summary": "Track a parcel",
+        "operationId": "track",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "courier",
+                  "trackingNumber"
+                ],
+                "properties": {
+                  "courier": {
+                    "type": "string"
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "description": "The caller's own credentials for that courier, 1-8 string fields. Never stored. Omit entirely for the sandbox courier.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "baseUrl": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                      },
+                      "fromWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "timeoutMs": {
+                        "type": "integer",
+                        "minimum": 1000,
+                        "maximum": 30000
+                      }
+                    }
+                  },
+                  "trackingNumber": {
+                    "type": "string",
+                    "maxLength": 80
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Canonical status plus every event the courier reports",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "trackingNumber": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "status": {
+                            "type": "string"
+                          },
+                          "rawStatus": {
+                            "type": "string"
+                          },
+                          "timestamp": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or configuration error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Courier error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/rates": {
+      "post": {
+        "tags": [
+          "shipping"
+        ],
+        "summary": "Quote delivery and return fees",
+        "operationId": "rates",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "courier",
+                  "query"
+                ],
+                "properties": {
+                  "courier": {
+                    "type": "string"
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "description": "The caller's own credentials for that courier, 1-8 string fields. Never stored. Omit entirely for the sandbox courier.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "baseUrl": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                      },
+                      "fromWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "timeoutMs": {
+                        "type": "integer",
+                        "minimum": 1000,
+                        "maximum": 30000
+                      }
+                    }
+                  },
+                  "query": {
+                    "type": "object",
+                    "required": [
+                      "toWilaya",
+                      "deliveryType"
+                    ],
+                    "properties": {
+                      "fromWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "toWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "toCommune": {
+                        "type": "string"
+                      },
+                      "deliveryType": {
+                        "type": "string",
+                        "enum": [
+                          "home",
+                          "stopdesk"
+                        ]
+                      },
+                      "tier": {
+                        "type": "string",
+                        "enum": [
+                          "express",
+                          "economic"
+                        ]
+                      },
+                      "codAmount": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "responses": {}
+        }
+      }
+    },
+    "/v1/couriers": {
+      "get": {
+        "tags": [
+          "reference"
+        ],
+        "summary": "Every supported courier",
+        "operationId": "couriers",
+        "parameters": [
+          {
+            "name": "platform",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "ecotrack"
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "example": "rocket"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Courier catalogue",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "platform": {
+                        "type": "string"
+                      },
+                      "aliases": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "requiredCredentials": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "capabilities": {
+                        "type": "object",
+                        "additionalProperties": {
+                          "type": "boolean"
+                        }
+                      },
+                      "endpoint": {
+                        "type": "string"
+                      },
+                      "requiresBaseUrl": {
+                        "type": "boolean"
+                      },
+                      "baseUrlSuffixes": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/wilayas": {
+      "get": {
+        "tags": [
+          "reference"
+        ],
+        "summary": "Wilayas — the 58 couriers deliver to, or all 69 of the 2026 division",
+        "operationId": "wilayas",
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 69
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "all",
+            "in": "query",
+            "description": "Include the wilayas created in 2026 that couriers do not accept yet",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list, or a single wilaya when ?code= (or the bare ?16 shorthand) is used",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "integer"
+                      },
+                      "nameFr": {
+                        "type": "string"
+                      },
+                      "nameAr": {
+                        "type": "string"
+                      },
+                      "isDeepSouth": {
+                        "type": "boolean"
+                      },
+                      "communeCount": {
+                        "type": "integer"
+                      },
+                      "courierSupported": {
+                        "type": "boolean"
+                      },
+                      "shipAs": {
+                        "type": "integer",
+                        "description": "For an unsupported wilaya: the code to send instead"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No wilaya with that code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/communes": {
+      "get": {
+        "tags": [
+          "reference"
+        ],
+        "summary": "Communes, in the spelling courier APIs expect",
+        "operationId": "communes",
+        "parameters": [
+          {
+            "name": "wilaya",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 69
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Communes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "wilayaCode": {
+                        "type": "integer"
+                      },
+                      "nameFr": {
+                        "type": "string"
+                      },
+                      "nameAr": {
+                        "type": "string"
+                      },
+                      "gazetteName": {
+                        "type": "string"
+                      },
+                      "shipAs": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No wilaya with that code",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": [
+          "reference"
+        ],
+        "summary": "Liveness",
+        "operationId": "health",
+        "responses": {}
+      }
+    },
+    "/stats": {
+      "get": {
+        "tags": [
+          "reference"
+        ],
+        "summary": "Total requests served since launch",
+        "operationId": "stats",
+        "responses": {}
+      }
+    }
+  }
+}

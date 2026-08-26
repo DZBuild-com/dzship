@@ -88,11 +88,15 @@ try {
 }
 ```
 
-Free lookups (no credentials):
+Free lookups (no credentials, and cacheable — cache them):
 
 ```js
-const couriers = await dzship.couriers(); // keys + required credential fields
-const wilayas  = await dzship.wilayas();  // cache this — it never changes
+const couriers = await dzship.couriers();            // every courier + its credential fields
+const mine     = await dzship.couriers({ q: 'rocket' });   // find yours by name
+const wilayas  = await dzship.wilayas();             // the 58 you can ship to
+const alger    = await dzship.wilayas(16);           // one wilaya
+const communes = await dzship.communes(16);          // its communes, courier spelling
+const all69    = await dzship.wilayas({ all: true }); // 2026 division, each with shipAs
 ```
 
 TypeScript types ship with the package (`Order`, `RatesQuery`, `DzshipError`…).
@@ -262,11 +266,11 @@ network behaves.
 | 429 | `rate_limited` | Wait `retry-after` seconds (exposed by all three clients) |
 | 503 | `overloaded` | Retry after a few seconds |
 
-Fair-use limits (per IP): 30 orders/hour, 100 orders/day, 30 tracking
-calls/minute, 20 rate quotes/minute. Design around them: track on page-view
-rather than tight loops, cache `/v1/wilayas` and `/v1/couriers`, and queue
-bulk imports instead of firing them all at once. Current values:
-[freeship.dzbuild.com/#limits](https://freeship.dzbuild.com/#limits).
+Fair-use limits (per IP): 200 orders/hour, 1,000 orders/day, 60 tracking
+calls/minute, 60 rate quotes/minute. Design around them: track on page-view
+rather than tight loops, cache `/v1/wilayas`, `/v1/communes` and `/v1/couriers`
+(they send a `Cache-Control` header), and queue bulk imports instead of firing
+them all at once. Current values: [freeship.dzbuild.com/#limits](https://freeship.dzbuild.com/#limits).
 
 ## Which courier? Which commune spelling?
 
