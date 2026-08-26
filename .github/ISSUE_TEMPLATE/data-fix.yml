@@ -1,0 +1,30 @@
+name: A commune or wilaya is wrong
+description: Report a wrong, missing or misspelled entry in the dataset
+title: "Data: "
+labels: ["data"]
+body:
+  - type: input
+    id: entry
+    attributes:
+      label: What is wrong
+      placeholder: Commune "Ain Oussera" in wilaya 17
+    validations:
+      required: true
+  - type: input
+    id: expected
+    attributes:
+      label: What it should be
+      description: >
+        For a commune, the spelling the courier's own list uses — that is what
+        makes the fix correct instead of a guess.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: How you know
+      description: >
+        Which courier accepted or rejected it, or the Journal Officiel reference
+        for a wilaya change.
+    validations:
+      required: true

@@ -1,0 +1,42 @@
+name: A courier is missing
+description: Ask for an Algerian courier to be added
+title: "Add courier: "
+labels: ["courier"]
+body:
+  - type: input
+    id: courier
+    attributes:
+      label: Courier name
+      description: The name on the contract, as merchants know it.
+      placeholder: Rocket Delivery
+    validations:
+      required: true
+  - type: input
+    id: dashboard
+    attributes:
+      label: Dashboard URL
+      description: >
+        Where you log in to that courier. This usually answers which platform it
+        runs on by itself — something.ecotrack.dz, for instance.
+      placeholder: https://rocket.ecotrack.dz
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform, if you know it
+      options:
+        - I don't know
+        - Ecotrack
+        - Yalidine
+        - Procolis
+        - Its own API
+    validations:
+      required: false
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: >
+        API documentation link, the credential fields their dashboard shows you,
+        or which wilayas they cover. Never paste a token.

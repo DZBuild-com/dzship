@@ -1,0 +1,35 @@
+name: The API misbehaved
+description: A call to freeship.dzbuild.com did something it should not
+title: "API: "
+labels: ["api"]
+body:
+  - type: textarea
+    id: request
+    attributes:
+      label: The request
+      description: >
+        Curl or the JSON body, with credentials removed. Replace tokens with "…"
+        — do not paste them, even expired ones.
+      render: bash
+    validations:
+      required: true
+  - type: textarea
+    id: response
+    attributes:
+      label: The response
+      description: Status code and body.
+      render: json
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: Roughly when (with timezone)
+      description: Requests are traced, so a timestamp is enough to find it.
+      placeholder: 2026-08-26 14:30 UTC+1
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead

@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/DZBuild-com/dzship/blob/main/SECURITY.md
+    about: Do not open an issue — email security@dzbuild.com.
+  - name: API reference
+    url: https://freeship.dzbuild.com
+    about: Endpoints, fields, error codes and rate limits.

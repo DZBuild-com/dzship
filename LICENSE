@@ -1,20 +1,21 @@
-Copyright (c) 2026 DZBuild (dzbuild.com). All rights reserved.
+MIT License
 
-The guides and documentation in this repository may be read, referenced,
-quoted, and used freely to build shipping integrations. Republishing them
-wholesale requires a link back to this repository.
+Copyright (c) 2026 DZBuild (https://dzbuild.com)
 
-The wilaya and commune datasets in the data/ directory describe public
-administrative facts and are dedicated to the public domain (CC0). Use them
-in any project, commercial or not, with no attribution required.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-The client libraries in the clients/ directory are licensed under the MIT
-License: permission is hereby granted, free of charge, to any person obtaining
-a copy of those files, to deal in them without restriction, including without
-limitation the rights to use, copy, modify, merge, publish, distribute,
-sublicense, and/or sell copies, subject to no conditions. THE SOFTWARE IS
-PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-The freeship service (https://freeship.dzbuild.com) and its implementation
-are proprietary to DZBuild. No rights to the service implementation are
-granted.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
