@@ -193,7 +193,7 @@ class DzShip
   # @param courier [String, Symbol] "yalidine", "zrexpress", "maystro", "noest", or "ecotrack"
   # @param credentials [Hash] your own courier account credentials — see DzShip.couriers
   # @param options [Hash] adapter tuning: fromWilaya, baseUrl, timeoutMs — see the docs
-  def initialize(courier:, credentials:, options: {}, gateway: GATEWAY, timeout: 30)
+  def initialize(courier:, credentials: nil, options: {}, gateway: GATEWAY, timeout: 30)
     @courier = courier.to_s
     @credentials = credentials
     @options = options
@@ -226,7 +226,8 @@ class DzShip
   private
 
   def post(path, extra)
-    body = {courier: @courier, credentials: @credentials, **extra}
+    body = {courier: @courier, **extra}
+    body[:credentials] = @credentials if @credentials && !@credentials.empty?
     body[:options] = @options unless @options.empty?
     self.class.request(:post, "#{@gateway}#{path}", body: body, timeout: @timeout)
   end

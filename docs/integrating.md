@@ -9,14 +9,14 @@ Full request/response reference: [docs/api — freeship.dzbuild.com](https://fre
 
 ## Pick your lane
 
-| Stack                                    | Fastest path                                                                       |
-| ---------------------------------------- | ---------------------------------------------------------------------------------- |
-| Node.js 18+                              | `npm install dzship` → [Node client](#nodejs)                                      |
-| PHP (plain, Laravel, WooCommerce)        | copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) → [PHP](#php)           |
+| Stack | Fastest path |
+|---|---|
+| Node.js 18+ | `npm install dzship` → [Node client](#nodejs) |
+| PHP (plain, Laravel, WooCommerce) | copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) → [PHP](#php) |
 | Python (Django, Flask, FastAPI, scripts) | copy [`clients/python/dzship.py`](../clients/python/dzship.py) → [Python](#python) |
-| Ruby (Rails, Sinatra, scripts)           | copy [`clients/ruby/dzship.rb`](../clients/ruby/dzship.rb) → [Ruby](#ruby)         |
-| Google Sheets / Apps Script              | [Apps Script snippet](#google-sheets--apps-script)                                 |
-| Anything else                            | [raw curl / HTTP](#raw-http-any-language)                                          |
+| Ruby (Rails, Sinatra, scripts) | copy [`clients/ruby/dzship.rb`](../clients/ruby/dzship.rb) → [Ruby](#ruby) |
+| Google Sheets / Apps Script | [Apps Script snippet](#google-sheets--apps-script) |
+| Anything else | [raw curl / HTTP](#raw-http-any-language) |
 
 Every client in this repo is a thin wrapper around the same three calls —
 `POST /v1/orders`, `POST /v1/track`, `POST /v1/rates` — plus the free lookups
@@ -42,27 +42,27 @@ npm install dzship
 (Installing straight from GitHub also works: `npm install DZBuild-com/dzship`.)
 
 ```js
-import dzship from "dzship"; // or: const dzship = require('dzship')
+import dzship from 'dzship';           // or: const dzship = require('dzship')
 
 const client = dzship({
-  courier: "yalidine",
+  courier: 'yalidine',
   credentials: { apiId: process.env.YAL_ID, apiToken: process.env.YAL_TOKEN },
-  options: { fromWilaya: 16 }, // optional
+  options: { fromWilaya: 16 },         // optional
 });
 
 // 1. quote the fee (optional)
-const quote = await client.rates({ toWilaya: 31, deliveryType: "home" });
+const quote = await client.rates({ toWilaya: 31, deliveryType: 'home' });
 
 // 2. create the parcel
 const { trackingNumber } = await client.createOrder({
   recipient: {
-    fullName: "Amine Bouzid",
-    phone: "0551234567",
+    fullName: 'Amine Bouzid',
+    phone: '0551234567',
     wilayaCode: 16,
-    communeName: "Bab Ezzouar",
+    communeName: 'Bab Ezzouar',
   },
-  deliveryType: "home", // or 'stopdesk' (+ stopDeskId)
-  productList: "Sneakers Air x1",
+  deliveryType: 'home',                // or 'stopdesk' (+ stopDeskId)
+  productList: 'Sneakers Air x1',
   codAmount: 4500,
 });
 
@@ -74,14 +74,14 @@ Errors throw a typed `DzshipError` with `.status`, `.code`, `.fields` and
 `.retryAfter`:
 
 ```js
-import dzship, { DzshipError } from "dzship";
+import dzship, { DzshipError } from 'dzship';
 
 try {
   await client.createOrder(order);
 } catch (e) {
-  if (e instanceof DzshipError && e.code === "invalid_phone") {
+  if (e instanceof DzshipError && e.code === 'invalid_phone') {
     // ask the customer to fix the number
-  } else if (e.code === "rate_limited") {
+  } else if (e.code === 'rate_limited') {
     // wait e.retryAfter seconds
   } else {
     throw e;
@@ -92,12 +92,12 @@ try {
 Free lookups (no credentials, and cacheable — cache them):
 
 ```js
-const couriers = await dzship.couriers(); // every courier + its credential fields
-const mine = await dzship.couriers({ q: "rocket" }); // find yours by name
-const wilayas = await dzship.wilayas(); // the 58 you can ship to
-const alger = await dzship.wilayas(16); // one wilaya
-const communes = await dzship.communes(16); // its communes, courier spelling
-const all69 = await dzship.wilayas({ all: true }); // 2026 division, each with shipAs
+const couriers = await dzship.couriers();            // every courier + its credential fields
+const mine     = await dzship.couriers({ q: 'rocket' });   // find yours by name
+const wilayas  = await dzship.wilayas();             // the 58 you can ship to
+const alger    = await dzship.wilayas(16);           // one wilaya
+const communes = await dzship.communes(16);          // its communes, courier spelling
+const all69    = await dzship.wilayas({ all: true }); // 2026 division, each with shipAs
 ```
 
 TypeScript types ship with the package (`Order`, `RatesQuery`, `DzshipError`…).
@@ -246,29 +246,22 @@ The classic "200 COD orders in a spreadsheet" case — one function, no library:
 ```js
 function shipRow(row) {
   const sheet = SpreadsheetApp.getActiveSheet();
-  const [name, phone, wilayaCode, commune, product, cod] = sheet
-    .getRange(row, 1, 1, 6)
-    .getValues()[0];
+  const [name, phone, wilayaCode, commune, product, cod] =
+    sheet.getRange(row, 1, 1, 6).getValues()[0];
 
-  const res = UrlFetchApp.fetch("https://freeship.dzbuild.com/v1/orders", {
-    method: "post",
-    contentType: "application/json",
+  const res = UrlFetchApp.fetch('https://freeship.dzbuild.com/v1/orders', {
+    method: 'post',
+    contentType: 'application/json',
     muteHttpExceptions: true,
     payload: JSON.stringify({
-      courier: "yalidine",
+      courier: 'yalidine',
       credentials: {
-        apiId: PropertiesService.getScriptProperties().getProperty("YAL_ID"),
-        apiToken:
-          PropertiesService.getScriptProperties().getProperty("YAL_TOKEN"),
+        apiId: PropertiesService.getScriptProperties().getProperty('YAL_ID'),
+        apiToken: PropertiesService.getScriptProperties().getProperty('YAL_TOKEN'),
       },
       order: {
-        recipient: {
-          fullName: name,
-          phone: String(phone),
-          wilayaCode,
-          communeName: commune,
-        },
-        deliveryType: "home",
+        recipient: { fullName: name, phone: String(phone), wilayaCode, communeName: commune },
+        deliveryType: 'home',
         productList: product,
         codAmount: cod,
       },
@@ -314,13 +307,13 @@ network behaves.
 
 ## Errors and fair use
 
-| HTTP      | `error.code`                      | What to do                                                                                      |
-| --------- | --------------------------------- | ----------------------------------------------------------------------------------------------- |
-| 400       | `VALIDATION_ERROR`                | Fix the fields listed in `error.fields`                                                         |
-| 422       | `invalid_phone`                   | Not a valid Algerian mobile — correct the number                                                |
+| HTTP | `error.code` | What to do |
+|---|---|---|
+| 400 | `VALIDATION_ERROR` | Fix the fields listed in `error.fields` |
+| 422 | `invalid_phone` | Not a valid Algerian mobile — correct the number |
 | 422 / 502 | `NOT_SUPPORTED` / `COURIER_ERROR` | The courier rejected it — read `message` (bad credentials, unknown commune, missing stop desk…) |
-| 429       | `rate_limited`                    | Wait `retry-after` seconds (exposed by all clients)                                             |
-| 503       | `overloaded`                      | Retry after a few seconds                                                                       |
+| 429 | `rate_limited` | Wait `retry-after` seconds (exposed by all clients) |
+| 503 | `overloaded` | Retry after a few seconds |
 
 Fair-use limits (per IP): 200 orders/hour, 1,000 orders/day, 60 tracking
 calls/minute, 60 rate quotes/minute. Design around them: track on page-view
