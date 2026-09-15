@@ -78,7 +78,7 @@ shape stays the same. Full reference: [docs/endpoints.md](docs/endpoints.md).
 | Guide | What it answers |
 |---|---|
 | [API reference](docs/endpoints.md) | Every endpoint and field, errors, rate limits |
-| [Integrating dzship](docs/integrating.md) | Ready-made clients (Node, PHP, Python) and copy-paste snippets for every stack |
+| [Integrating dzship](docs/integrating.md) | Ready-made clients (Node, PHP, Python, Ruby) and copy-paste snippets for every stack |
 | [Choosing a courier](docs/choosing-a-courier.md) | Which delivery company fits your project: coverage, stop-desk, exchanges, API quality |
 | [Wilayas & communes](docs/wilayas-and-communes.md) | The complete dataset, and why Algeria's new 69-wilaya division must not reach a courier yet |
 | [Yalidine](docs/couriers/yalidine.md) | The biggest network. Also Yalitec, Guepex, Easy & Speed, Economiqua, We Can |
@@ -135,9 +135,11 @@ calls, with typed errors and retry-after handling built in:
   (ext-curl only, shared-hosting friendly).
 - **Python** — copy the single file [`clients/python/dzship.py`](clients/python/dzship.py)
   (standard library only, 3.8+).
+- **Ruby** — copy the single file [`clients/ruby/dzship.rb`](clients/ruby/dzship.rb)
+  (standard library only, Ruby 3.0+).
 
 The [integration guide](docs/integrating.md) has full examples for Laravel,
-WooCommerce, Django, Google Sheets and raw HTTP in any language.
+WooCommerce, Django, Rails, Google Sheets and raw HTTP in any language.
 
 ## Free dataset: 58 wilayas, 69 wilayas, 1,541 communes
 
