@@ -14,6 +14,7 @@ Full request/response reference: [docs/api — freeship.dzbuild.com](https://fre
 | Node.js 18+ | `npm install dzship` → [Node client](#nodejs) |
 | PHP (plain, Laravel, WooCommerce) | copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) → [PHP](#php) |
 | Python (Django, Flask, FastAPI, scripts) | copy [`clients/python/dzship.py`](../clients/python/dzship.py) → [Python](#python) |
+| Ruby (Rails, Sinatra, scripts) | copy [`clients/ruby/dzship.rb`](../clients/ruby/dzship.rb) → [Ruby](#ruby) |
 | Google Sheets / Apps Script | [Apps Script snippet](#google-sheets--apps-script) |
 | Anything else | [raw curl / HTTP](#raw-http-any-language) |
 
@@ -190,6 +191,54 @@ tracking = client.track(tracking_number)   # {"status": …, "events": […]}
 Works as-is inside Django views, Flask routes, FastAPI endpoints (wrap in
 `run_in_threadpool` for async), Celery tasks, or Odoo server actions.
 
+## Ruby
+
+Copy [`clients/ruby/dzship.rb`](../clients/ruby/dzship.rb) into your project
+(one file, standard library only, Ruby 3.0+):
+
+```ruby
+require_relative "dzship"
+
+client = DzShip.new(
+  courier: "yalidine",
+  credentials: { apiId: ENV["YAL_ID"], apiToken: ENV["YAL_TOKEN"] },
+  options: { fromWilaya: 16 }
+)
+
+begin
+  res = client.create_order(
+    recipient: { fullName: "Amine Bouzid", phone: "0551234567",
+                 wilayaCode: 16, communeName: "Bab Ezzouar" },
+    deliveryType: "home", productList: "Sneakers Air x1", codAmount: 4500
+  )
+  tracking_number = res["trackingNumber"]
+rescue DzShip::Error => e
+  if e.code == "invalid_phone"
+    # ask the customer to fix the number
+  elsif e.retryable?
+    # wait e.retry_after seconds
+  else
+    raise
+  end
+end
+
+# later
+tracking = client.track(tracking_number)   # {"status" => …, "events" => […]}
+```
+
+Quotes, lookups and the 2026 wilaya handoff:
+
+```ruby
+client.rates(toWilaya: 31, deliveryType: "home")
+DzShip.couriers                                    # every courier + its credential fields
+DzShip.wilayas                                     # the 58 you can ship to
+DzShip.communes(wilaya: 16)                        # its communes, courier spelling
+DzShip.wilaya_ship_code(68, wilayas_all: cached69) # 59-69 must ship under their shipAs code
+```
+
+**Rails**: put the client in the `lib/` folder. Use Rails credentials to store
+credentials. No extra gem needed.
+
 ## Google Sheets / Apps Script
 
 The classic "200 COD orders in a spreadsheet" case — one function, no library:
@@ -230,7 +279,7 @@ order creation, don't blast 200 rows in one minute.
 
 ## Raw HTTP (any language)
 
-Everything is one POST away — Go, Ruby, Java, C#, Rust, Dart, Deno, Bun, a
+Everything is one POST away — Go, Java, C#, Rust, Dart, Deno, Bun, a
 Cloudflare Worker, all the same shape:
 
 ```bash
@@ -263,7 +312,7 @@ network behaves.
 | 400 | `VALIDATION_ERROR` | Fix the fields listed in `error.fields` |
 | 422 | `invalid_phone` | Not a valid Algerian mobile — correct the number |
 | 422 / 502 | `NOT_SUPPORTED` / `COURIER_ERROR` | The courier rejected it — read `message` (bad credentials, unknown commune, missing stop desk…) |
-| 429 | `rate_limited` | Wait `retry-after` seconds (exposed by all three clients) |
+| 429 | `rate_limited` | Wait `retry-after` seconds (exposed by all clients) |
 | 503 | `overloaded` | Retry after a few seconds |
 
 Fair-use limits (per IP): 200 orders/hour, 1,000 orders/day, 60 tracking
