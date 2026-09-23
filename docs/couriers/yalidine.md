@@ -48,8 +48,10 @@ returns a printable label link at creation, so you don't need a second call.
 ## Yalidine-specific behavior
 
 - **Stop-desk**: set `deliveryType: "stopdesk"` and `order.stopDeskId` to the
-  numeric center id of the pickup point. Yalidine's stop-desk network is one of
-  the densest in the country and stop-desk orders return noticeably less often.
+  numeric center id of the pickup point, and send the center's commune as
+  `recipient.communeName`. `POST /v1/desks` lists the centers of a wilaya with
+  both. Yalidine's stop-desk network is one of the densest in the country and
+  stop-desk orders return noticeably less often.
 - **Insurance**: pass `order.declaredValue` to insure the parcel value.
 - **Free shipping flag**: by default Yalidine adds its delivery fee to the COD
   amount the customer pays. If you're absorbing shipping, set

@@ -57,7 +57,9 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 
 - **Stop-desk station codes**: NOEST identifies pickup stations by codes like
   `16A`, `19A` (wilaya number + letter), not numeric IDs. Pass that code as
-  `order.stopDeskId`.
+  `order.stopDeskId`; `POST /v1/desks` lists them for a wilaya. Wilayas 1 to 9
+  are written without the leading zero (`1A`, not `01A`), and dzship strips it
+  if you send it.
 - **Open package**: NOEST supports letting the customer open the parcel before
   paying. Set `order.hasOpenPackage: true`. Merchants report it lifts the
   delivered rate on higher-priced items.
