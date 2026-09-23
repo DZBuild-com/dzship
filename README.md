@@ -71,7 +71,9 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 ```
 
 Swap `"courier"` and `"credentials"` to ship with any other courier. The request
-shape stays the same. Full reference: [docs/endpoints.md](docs/endpoints.md).
+shape stays the same. Want the customer to pick a stop desk? `POST /v1/desks`
+lists the courier's desks in a wilaya. Full reference:
+[docs/endpoints.md](docs/endpoints.md).
 
 ## Start here
 

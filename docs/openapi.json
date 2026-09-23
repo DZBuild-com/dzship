@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "dzship — the free shipping API for Algeria",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "summary": "Create and track cash-on-delivery parcels with 99 Algerian couriers.",
     "description": "One request shape for every Algerian courier. No signup and no API key: you send your own courier credentials with each call and they are never stored. Try it with courier \"sandbox\", which needs no credentials and creates nothing.",
     "contact": {
@@ -663,8 +663,386 @@
                 }
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The fee for that route",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "deliveryFee",
+                    "total",
+                    "currency",
+                    "deliveryType"
+                  ],
+                  "properties": {
+                    "deliveryFee": {
+                      "type": "number"
+                    },
+                    "returnFee": {
+                      "type": "number"
+                    },
+                    "codFee": {
+                      "type": "number"
+                    },
+                    "total": {
+                      "type": "number"
+                    },
+                    "currency": {
+                      "type": "string",
+                      "example": "DZD"
+                    },
+                    "deliveryType": {
+                      "type": "string",
+                      "enum": [
+                        "home",
+                        "stopdesk"
+                      ]
+                    },
+                    "estimatedDays": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
           },
-          "responses": {}
+          "400": {
+            "description": "Validation or configuration error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Courier error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/desks": {
+      "post": {
+        "tags": [
+          "shipping"
+        ],
+        "summary": "List the stop desks a courier runs in one wilaya",
+        "description": "Same courier and credentials as an order. To ship to a desk, send deliveryType \"stopdesk\", the desk id as order.stopDeskId and its communeName (when present) as recipient.communeName. Couriers whose API publishes no desk list answer 422.",
+        "operationId": "desks",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "courier",
+                  "wilayaCode"
+                ],
+                "properties": {
+                  "courier": {
+                    "type": "string",
+                    "example": "sandbox"
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "description": "The caller's own credentials for that courier, 1-8 string fields. Never stored. Omit entirely for the sandbox courier.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "baseUrl": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                      },
+                      "fromWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "timeoutMs": {
+                        "type": "integer",
+                        "minimum": 1000,
+                        "maximum": 30000
+                      }
+                    }
+                  },
+                  "wilayaCode": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 58,
+                    "example": 31
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The desks, possibly none",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "name",
+                      "wilayaCode"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Send as order.stopDeskId"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "wilayaCode": {
+                        "type": "integer"
+                      },
+                      "communeName": {
+                        "type": "string",
+                        "description": "Send as order.recipient.communeName"
+                      },
+                      "address": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or configuration error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This courier publishes no desk list over its API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Courier error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },

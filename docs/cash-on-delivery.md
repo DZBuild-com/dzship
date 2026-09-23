@@ -77,7 +77,9 @@ with courier-side rules (see Maystro's same-day duplicate policy in the
 customer collects it there. It's cheaper, faster, and the customer showing up
 is self-selection: refusal rates drop. The trade-off is coverage (not every
 commune has a desk) and friction for the customer. Offer both when you can and
-let the rate quote price them honestly.
+let the rate quote price them honestly. `POST /v1/desks` gives you the desks to
+offer, so the customer picks one instead of typing an address the courier has
+to guess.
 
 ## A data model that survives contact with COD
 

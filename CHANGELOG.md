@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-09-23
+
+**New: `POST /v1/desks`.** The stop desks a courier runs in one wilaya, with the
+same `courier` and `credentials` as an order, so a checkout can offer a list
+instead of asking the customer for an id nobody knows. Ship to the chosen desk
+with `deliveryType: "stopdesk"`, its `id` as `order.stopDeskId` and its
+`communeName` as the recipient's commune. The sandbox courier has one desk per
+wilaya, so the whole flow runs without an account.
+([#3](https://github.com/DZBuild-com/dzship/issues/3))
+
+**Ecotrack couriers quote real prices.** Rate quotes for the Ecotrack family came
+back with an empty fee. They now read the account's own price list, return fee
+included. Tracking history for those couriers was always empty and now carries
+every event.
+
+**NOEST desks in wilayas 1 to 9.** NOEST lists those desks as `01A` but only
+accepts `1A` when you ship. The desk list returns the code NOEST accepts, and an
+order sent with the padded form is corrected on the way.
+
+**Maystro desks** show their real names and no longer include partner shops that
+a stop-desk parcel never reaches.
+
+**Clients 1.2.0**: `desks()` in the Node, PHP, Python and Ruby clients.
+
 ## 2026-08-26
 
 **92 couriers, each with its own key.** Every courier running on the Yalidine

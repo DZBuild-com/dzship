@@ -19,6 +19,7 @@ creates nothing. Swap in a real courier key when your account is ready.
 | `POST /v1/orders` | Create a parcel on your courier account |
 | `POST /v1/track` | Status + full event history for a tracking number |
 | `POST /v1/rates` | Delivery and return fees for a route |
+| `POST /v1/desks` | The stop desks a courier runs in one wilaya |
 | `GET /v1/couriers` | Every supported courier, its credentials and capabilities |
 | `GET /v1/wilayas` | The 58 wilayas couriers deliver to (`?all=1` for all 69) |
 | `GET /v1/communes` | All 1,541 communes, filterable by wilaya |
@@ -69,7 +70,7 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 | `order.recipient.communeName` | yes | French spelling from `GET /v1/communes` |
 | `order.recipient.addressLine` | home delivery | Up to 255 chars |
 | `order.deliveryType` | yes | `home` or `stopdesk` |
-| `order.stopDeskId` | stopdesk | The courier's desk id |
+| `order.stopDeskId` | stopdesk | The `id` of a desk from `POST /v1/desks` |
 | `order.productList` | yes | What is in the parcel. Truncated per courier's real limit |
 | `order.codAmount` | yes | Integer DZD. `0` for a prepaid parcel |
 | `order.weightKg` | no | |
@@ -108,6 +109,37 @@ curl -X POST https://freeship.dzbuild.com/v1/rates \
 
 `query.tier` accepts `express` (default) or `economic` where the courier runs a
 slower cheap lane.
+
+## POST /v1/desks
+
+The stop desks a courier runs in one wilaya, so the customer can pick one. It
+takes the same `courier` and `credentials` as an order. The sandbox answers
+without an account:
+
+```bash
+curl -X POST https://freeship.dzbuild.com/v1/desks \
+  -H 'Content-Type: application/json' \
+  -d '{ "courier": "sandbox", "wilayaCode": 31 }'
+```
+
+```json
+[ { "id": "SBX-31", "name": "Sandbox desk Oran", "wilayaCode": 31,
+    "communeName": "Oran", "address": "Sandbox address, Oran" } ]
+```
+
+To ship to the chosen desk, create the order with `deliveryType: "stopdesk"`,
+the desk's `id` as `order.stopDeskId` and, when the desk has one, its
+`communeName` as `order.recipient.communeName`. That one rule covers every
+courier, because they route a desk parcel in one of two ways:
+
+| Courier | What routes the parcel to the desk |
+|---|---|
+| Yalidine family, NOEST, ZR Express (new platform), Zimou, Ecom Delivery, MDM, Near Delivery | The desk `id`. Yalidine also checks the desk's commune |
+| Every Ecotrack courier, Maystro, Elogistia | The commune. Their APIs take no desk id |
+| ZR Express (Procolis), Colivraison | No desk list over their API: `422 NOT_SUPPORTED` |
+
+An empty list means the courier has no desk in that wilaya. Desk lists change a
+few times a year, so cache them per courier and wilaya for a day.
 
 ## GET /v1/couriers
 
@@ -192,6 +224,7 @@ anyone who asks.
 | Tracking calls / minute / IP | 60 |
 | Tracking calls / day / IP | 5,000 |
 | Rate quotes / minute / IP | 60 |
+| Desk lists / minute / IP | 60 |
 
 `GET /v1/wilayas`, `/v1/communes` and `/v1/couriers` are reference data: they
 ship a `Cache-Control` header, so cache them and stop asking.

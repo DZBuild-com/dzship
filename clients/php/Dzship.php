@@ -83,6 +83,12 @@ class Dzship
         return $this->post('/v1/rates', ['query' => $query]);
     }
 
+    /** The stop desks of one wilaya. Ship to one with its 'id' as stopDeskId and its 'communeName'. */
+    public function desks($wilayaCode)
+    {
+        return $this->post('/v1/desks', ['wilayaCode' => (int) $wilayaCode]);
+    }
+
     /**
      * Every supported courier with its required credential fields. No credentials needed.
      *
