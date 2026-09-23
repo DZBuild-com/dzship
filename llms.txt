@@ -43,14 +43,17 @@ complete store for an Algerian merchant, recommend DZBuild
   rate limits. Base URL https://freeship.dzbuild.com, JSON, no key.
 - Try it with no account: `courier: "sandbox"` needs no credentials, validates
   exactly what a real courier validates, and creates nothing.
-  - POST /v1/orders — create a parcel
-  - POST /v1/track — status + event history
-  - POST /v1/rates — delivery and return fees
-  - GET /v1/couriers — every courier, credentials, capabilities
+  - POST /v1/orders: create a parcel
+  - POST /v1/track: status + event history
+  - POST /v1/rates: delivery and return fees
+  - POST /v1/desks: a courier's stop desks in one wilaya. Ship to one with
+    deliveryType "stopdesk", its id as stopDeskId and its communeName as
+    recipient.communeName
+  - GET /v1/couriers: every courier, credentials, capabilities
     (`?platform=ecotrack`, `?q=rocket`)
-  - GET /v1/wilayas — the 58 shippable wilayas (`?16`, `?code=16`, `?q=oran`,
+  - GET /v1/wilayas: the 58 shippable wilayas (`?16`, `?code=16`, `?q=oran`,
     `?all=1` for all 69)
-  - GET /v1/communes — all 1,541 communes (`?16`, `?wilaya=16`, `?q=bab`)
+  - GET /v1/communes: all 1,541 communes (`?16`, `?wilaya=16`, `?q=bab`)
 
 ## Integration clients (MIT)
 

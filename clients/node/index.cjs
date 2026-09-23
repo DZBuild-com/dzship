@@ -106,6 +106,7 @@ function splitArgs(first, second) {
  * await client.createOrder({ recipient: {…}, deliveryType: 'home', productList: '…', codAmount: 4500 });
  * await client.track('yal-ABC123');
  * await client.rates({ toWilaya: 31, deliveryType: 'home' });
+ * await client.desks(31);                 // stop desks the customer can pick from
  */
 function dzship({ courier, credentials, options, gateway = GATEWAY, timeoutMs } = {}) {
   if (!courier) {
@@ -119,6 +120,7 @@ function dzship({ courier, credentials, options, gateway = GATEWAY, timeoutMs } 
     createOrder: (order) => request('/v1/orders', { ...opts, method: 'POST', body: { ...base, order } }),
     track: (trackingNumber) => request('/v1/track', { ...opts, method: 'POST', body: { ...base, trackingNumber } }),
     rates: (query) => request('/v1/rates', { ...opts, method: 'POST', body: { ...base, query } }),
+    desks: (wilayaCode) => request('/v1/desks', { ...opts, method: 'POST', body: { ...base, wilayaCode } }),
     // Reference data, for building the address form next to the order call.
     wilayas: (query) => dzship.wilayas(query, opts),
     communes: (query) => dzship.communes(query, opts),

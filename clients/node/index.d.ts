@@ -70,6 +70,15 @@ export interface RatesResult {
   [k: string]: unknown;
 }
 
+/** A stop desk. Ship to it with `stopDeskId: id` and, when present, `communeName`. */
+export interface StopDesk {
+  id: string;
+  name: string;
+  wilayaCode: number;
+  communeName?: string;
+  address?: string;
+}
+
 export interface CourierInfo {
   key: string;
   name: string;
@@ -128,6 +137,7 @@ export interface Client {
   createOrder(order: Order): Promise<CreateOrderResult>;
   track(trackingNumber: string): Promise<TrackResult>;
   rates(query: RatesQuery): Promise<RatesResult>;
+  desks(wilayaCode: number): Promise<StopDesk[]>;
   wilayas(query?: WilayaQuery): Promise<Wilaya[] | Wilaya>;
   communes(query?: CommuneQuery): Promise<Commune[]>;
   couriers(query?: CourierQuery): Promise<CourierInfo[]>;

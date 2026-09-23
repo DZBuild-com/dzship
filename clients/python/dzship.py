@@ -107,6 +107,10 @@ class Dzship:
         """Quote a delivery fee. `query` needs at least toWilaya + deliveryType."""
         return self._post("/v1/rates", {"query": query})
 
+    def desks(self, wilaya_code):
+        """The stop desks of one wilaya. Ship to one with its "id" as stopDeskId and its "communeName"."""
+        return self._post("/v1/desks", {"wilayaCode": int(wilaya_code)})
+
     def _post(self, path, extra):
         # The sandbox courier takes no credentials; every other one names what it needs.
         body = {"courier": self.courier}
