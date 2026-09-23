@@ -24,6 +24,7 @@ require "uri"
 #
 #   client.track("yal-ABC123")
 #   client.rates(toWilaya: 31, deliveryType: "home")
+#   client.desks(31)        # => stop desks the customer can pick from
 #
 #   DzShip.couriers          # => supported couriers + required credential fields
 #   DzShip.wilayas           # => the 58 shippable wilayas, cache this — it rarely changes
@@ -221,6 +222,11 @@ class DzShip
   # POST /v1/rates — delivery + return fee for a route. Needs at least toWilaya + deliveryType.
   def rates(query)
     post("/v1/rates", query: query)
+  end
+
+  # POST /v1/desks: the stop desks of one wilaya. Ship to one with its "id" as stopDeskId and its "communeName".
+  def desks(wilaya_code)
+    post("/v1/desks", wilayaCode: Integer(wilaya_code))
   end
 
   private

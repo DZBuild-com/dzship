@@ -43,7 +43,8 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 
 - **Exchanges**: supported; set `order.isExchange: true` when the driver should
   swap the parcel against the customer's return.
-- **Stop-desk**: supported via `deliveryType: "stopdesk"`.
+- **Stop-desk**: supported via `deliveryType: "stopdesk"`. ZR's API publishes
+  no desk list, so `POST /v1/desks` answers `422 NOT_SUPPORTED` for `zrexpress`.
 - **No label endpoint**: print labels from the ZR dashboard. `labelUrl` will
   not be returned.
 - **No cancel endpoint**: cancel from the dashboard or by contacting ZR.
