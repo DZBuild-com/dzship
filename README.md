@@ -1,6 +1,6 @@
 # dzship — Algerian shipping, explained for developers
 
-[![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![npm downloads](https://img.shields.io/npm/dm/dzship?color=0a7d33)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com) [![couriers](https://img.shields.io/badge/couriers-99-0a7d33)](https://freeship.dzbuild.com/v1/couriers) [![license](https://img.shields.io/badge/license-MIT-666)](LICENSE)
+[![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com) [![couriers](https://img.shields.io/badge/couriers-99-0a7d33)](https://freeship.dzbuild.com/v1/couriers) [![license](https://img.shields.io/badge/license-MIT-666)](LICENSE)
 
 **[API reference](docs/endpoints.md)** · **[Try it now](#try-it-now-no-account-needed)** · **[Couriers](#your-courier-is-probably-already-in-here)** · **[Wilaya dataset](#free-dataset-58-wilayas-69-wilayas-1541-communes)** · **[freeship.dzbuild.com](https://freeship.dzbuild.com)**
 
