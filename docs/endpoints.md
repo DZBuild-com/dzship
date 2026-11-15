@@ -8,7 +8,7 @@ Call it from a server. Courier credentials in browser JavaScript are public
 credentials.
 
 Machine-readable spec: [`/openapi.json`](https://freeship.dzbuild.com/openapi.json)
-(OpenAPI 3.1), mirrored in this repo at [`docs/openapi.json`](openapi.json).
+(OpenAPI 3.1), with a copy on GitHub at [`docs/openapi.json`](openapi.json).
 
 **No credentials yet?** `"courier": "sandbox"` needs none. It validates exactly
 what a real courier validates — phone, wilaya, commune, field limits — and

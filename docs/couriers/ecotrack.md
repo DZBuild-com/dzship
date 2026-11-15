@@ -170,4 +170,4 @@ short-list couriers your target wilayas trust, run a small volume through each,
 compare outcomes. Switching later is a one-word change to `courier`.
 
 Full request/response reference: [freeship.dzbuild.com](https://freeship.dzbuild.com),
-or [docs/endpoints.md](../endpoints.md) in this repo.
+or the [endpoints guide](../endpoints.md).

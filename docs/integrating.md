@@ -3,9 +3,9 @@
 dzship is a plain HTTPS + JSON API at `https://freeship.dzbuild.com`. No signup,
 no API key, no SDK lock-in: anything that can send an HTTP request can ship
 parcels. This page gives you the fastest path for each stack — either a
-ready-made client from this repo, or a copy-paste snippet.
+ready-made client from the dzship repository, or a copy-paste snippet.
 
-Full request/response reference: [docs/api — freeship.dzbuild.com](https://freeship.dzbuild.com)
+Full request/response reference: [freeship.dzbuild.com/docs/api](https://freeship.dzbuild.com/docs/api)
 
 ## Pick your lane
 
@@ -18,7 +18,7 @@ Full request/response reference: [docs/api — freeship.dzbuild.com](https://fre
 | Google Sheets / Apps Script | [Apps Script snippet](#google-sheets--apps-script) |
 | Anything else | [raw curl / HTTP](#raw-http-any-language) |
 
-Every client in this repo is a thin wrapper around the same three calls —
+Every client in the repository is a thin wrapper around the same three calls —
 `POST /v1/orders`, `POST /v1/track`, `POST /v1/rates` — plus the free lookups
 `GET /v1/couriers` and `GET /v1/wilayas`. They are MIT-licensed: vendor them,
 edit them, ship them in commercial projects.
@@ -323,7 +323,7 @@ them all at once. Current values: [freeship.dzbuild.com/#limits](https://freeshi
 
 ## Which courier? Which commune spelling?
 
-That's what the rest of this repo is for:
+That's what the other guides are for:
 
 - [Choosing a courier](choosing-a-courier.md) — coverage, stop-desks, exchanges, API quality
 - [Wilayas & communes](wilayas-and-communes.md) + the [CC0 dataset](../data/) — the exact spellings couriers accept

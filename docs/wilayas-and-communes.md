@@ -60,7 +60,7 @@ same law explains why: article 54 keeps the *wilayas mères* running the new
 territories until the handover completes, with a deadline of 31 December 2026.
 Send `wilayaCode: 60` today and the parcel is rejected.
 
-So the split in this repo is deliberate:
+So the split in the dataset is deliberate:
 
 | You want | Use |
 |---|---|

@@ -55,4 +55,4 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 - **Cancel and labels**: both available through the API.
 
 Full request/response reference: [freeship.dzbuild.com](https://freeship.dzbuild.com),
-or [docs/endpoints.md](../endpoints.md) in this repo.
+or the [endpoints guide](../endpoints.md).
