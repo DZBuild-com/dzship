@@ -88,4 +88,4 @@ production traffic daily, and it's free, so direct integration mostly buys you
 maintenance work.
 
 Full request/response reference: [freeship.dzbuild.com](https://freeship.dzbuild.com),
-or [docs/endpoints.md](../endpoints.md) in this repo.
+or the [endpoints guide](../endpoints.md).
