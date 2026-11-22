@@ -11,6 +11,12 @@ courier key, so they stay out of the conversation. Labels stay on
 `POST /v1/label`: a PDF is no use inside a conversation. Setup for Claude Code,
 Cursor and VS Code is in the [MCP guide](https://freeship.dzbuild.com/docs/mcp).
 
+**Listed in the official MCP registry** as `com.dzbuild/dzship`. `server.json`
+is the entry.
+
+**Clients 1.3.2**: no code change. The npm, Packagist and pip pages now carry
+the MCP section.
+
 ## 2026-11-22 (1.3.1)
 
 **New: `POST /v1/label` and `POST /v1/cancel`.** The waybill of a parcel, as a

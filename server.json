@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.dzbuild/dzship",
+  "title": "dzship: shipping for Algeria",
+  "description": "Create, track, price and cancel cash-on-delivery parcels with 101 Algerian couriers. No login.",
+  "version": "1.0.0",
+  "websiteUrl": "https://freeship.dzbuild.com/docs/mcp",
+  "icons": [
+    {
+      "src": "https://freeship.dzbuild.com/apple-touch-icon.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "180x180"
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://freeship.dzbuild.com/mcp",
+      "headers": [
+        {
+          "name": "X-Courier-Credentials",
+          "description": "Optional. Your own courier credentials as JSON keyed by courier key, for example {\"yalidine\":{\"apiId\":\"...\",\"apiToken\":\"...\"}}. Used when a tool call carries none, so they stay out of the conversation. The sandbox courier needs none.",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ]
+}
