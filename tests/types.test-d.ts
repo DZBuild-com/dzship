@@ -34,6 +34,13 @@ async function shapes() {
     codAmount: 4500,
   });
   const reference: string | undefined = created.courierReference;
+  const label = await client.label(created.trackingNumber);
+  const file: string = label.format === 'url' ? (label.url ?? label.data) : label.data;
+  const { cancelled } = await client.cancel(created.trackingNumber);
+  // @ts-expect-error a label has three formats
+  if (label.format === 'png') void 0;
   void reference;
+  void file;
+  void cancelled;
 }
 void shapes;

@@ -33,6 +33,9 @@ const client = dzship('sandbox'); // later: dzship('yalidine', { apiId, apiToken
 const { trackingNumber } = await client.createOrder(order);
 ```
 
+The same client prints the label (`client.label(trackingNumber)`) and cancels a
+parcel (`client.cancel(trackingNumber)`), for the couriers that offer it.
+
 PHP: `composer require dzbuild/dzship`. Python and Ruby: one file each in
 [`clients/`](clients/). The courier keys and the credential fields each one
 needs are in [`data/couriers.json`](data/couriers.json).
@@ -64,8 +67,8 @@ retry a create.
 ## If you are editing this repository
 
 - No build step and no dependencies. `node --test tests/` checks the Node client offline.
-- `node scripts/sync-couriers.mjs` regenerates `data/couriers.json` and the courier types
-  from the live list. Never edit those two files by hand.
+- `node scripts/sync-couriers.mjs` regenerates `data/couriers.json`, the courier types and
+  the support table in the README from the live list. Never edit those by hand.
 - A dataset change needs a source: for a commune, the courier list that accepts
   or rejects the name; for a wilaya, the *Journal Officiel* article.
 - The clients in `clients/` are deliberately dependency-free. Keep them that way.

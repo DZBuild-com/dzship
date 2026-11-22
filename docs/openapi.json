@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "dzship — the free shipping API for Algeria",
-    "version": "1.2.0",
+    "version": "1.3.1",
     "summary": "Create and track cash-on-delivery parcels with 101 Algerian couriers.",
     "description": "One request shape for every Algerian courier. No signup and no API key: you send your own courier credentials with each call and they are never stored. Try it with courier \"sandbox\", which needs no credentials and creates nothing.",
     "contact": {
@@ -979,6 +979,457 @@
           },
           "424": {
             "description": "Courier error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/label": {
+      "post": {
+        "tags": [
+          "shipping"
+        ],
+        "summary": "Get the waybill of a parcel",
+        "description": "Returns the label the courier prints for this parcel. format \"pdf\" carries the file in data as base64; format \"url\" carries a link in url. GET /v1/couriers says which couriers offer labels (capabilities.label); the others answer 422.",
+        "operationId": "label",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "courier",
+                  "trackingNumber"
+                ],
+                "properties": {
+                  "courier": {
+                    "type": "string",
+                    "example": "sandbox"
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "description": "The caller's own credentials for that courier, 1-8 string fields. Never stored. Omit entirely for the sandbox courier.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "baseUrl": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and takes no URL."
+                      },
+                      "fromWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "timeoutMs": {
+                        "type": "integer",
+                        "minimum": 1000,
+                        "maximum": 30000
+                      }
+                    }
+                  },
+                  "trackingNumber": {
+                    "type": "string",
+                    "maxLength": 80,
+                    "example": "DZTEST-1A2B3C"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The label",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "trackingNumber",
+                    "format",
+                    "data"
+                  ],
+                  "properties": {
+                    "trackingNumber": {
+                      "type": "string"
+                    },
+                    "format": {
+                      "type": "string",
+                      "enum": [
+                        "pdf",
+                        "zpl",
+                        "url"
+                      ]
+                    },
+                    "data": {
+                      "type": "string",
+                      "description": "Base64 of the file for pdf and zpl; the link for url"
+                    },
+                    "url": {
+                      "type": "string",
+                      "description": "Present when format is url"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or configuration error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This courier offers no label over its API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "Courier error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/cancel": {
+      "post": {
+        "tags": [
+          "shipping"
+        ],
+        "summary": "Cancel a parcel",
+        "description": "Cancels a parcel at the courier. Couriers accept this only before they collect the parcel; after that they refuse and the answer is 424 with their reason. Couriers with no cancel call (capabilities.cancelShipment false) answer 422.",
+        "operationId": "cancel",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "courier",
+                  "trackingNumber"
+                ],
+                "properties": {
+                  "courier": {
+                    "type": "string",
+                    "example": "sandbox"
+                  },
+                  "credentials": {
+                    "type": "object",
+                    "description": "The caller's own credentials for that courier, 1-8 string fields. Never stored. Omit entirely for the sandbox courier.",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "options": {
+                    "type": "object",
+                    "properties": {
+                      "baseUrl": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and takes no URL."
+                      },
+                      "fromWilaya": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "maximum": 58
+                      },
+                      "timeoutMs": {
+                        "type": "integer",
+                        "minimum": 1000,
+                        "maximum": 30000
+                      }
+                    }
+                  },
+                  "trackingNumber": {
+                    "type": "string",
+                    "maxLength": 80,
+                    "example": "DZTEST-1A2B3C"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The courier accepted the cancellation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "trackingNumber",
+                    "cancelled"
+                  ],
+                  "properties": {
+                    "trackingNumber": {
+                      "type": "string"
+                    },
+                    "cancelled": {
+                      "type": "boolean",
+                      "const": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or configuration error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "This courier has no cancel call",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "object",
+                      "required": [
+                        "code",
+                        "message"
+                      ],
+                      "properties": {
+                        "code": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "fields": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "424": {
+            "description": "The courier refused, or could not be reached",
             "content": {
               "application/json": {
                 "schema": {

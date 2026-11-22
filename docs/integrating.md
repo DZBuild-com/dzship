@@ -18,9 +18,10 @@ Full request/response reference: [freeship.dzbuild.com/docs/api](https://freeshi
 | Google Sheets / Apps Script | [Apps Script snippet](#google-sheets--apps-script) |
 | Anything else | [raw curl / HTTP](#raw-http-any-language) |
 
-Every client in the repository is a thin wrapper around the same three calls —
-`POST /v1/orders`, `POST /v1/track`, `POST /v1/rates` — plus the free lookups
-`GET /v1/couriers` and `GET /v1/wilayas`. They are MIT-licensed: vendor them,
+Every client in the repository is a thin wrapper around the same calls:
+`POST /v1/orders`, `/v1/track`, `/v1/rates`, `/v1/desks`, `/v1/label` and
+`/v1/cancel`, plus the free lookups `GET /v1/couriers`, `/v1/wilayas` and
+`/v1/communes`. They are MIT-licensed: vendor them,
 edit them, ship them in commercial projects.
 
 ## The one rule: keep credentials server-side
@@ -70,6 +71,10 @@ const { trackingNumber } = await client.createOrder({
 
 // 3. track it later
 const { status, events } = await client.track(trackingNumber);
+
+// 4. print the label, or cancel before the courier collects the parcel
+const label = await client.label(trackingNumber);   // { format: 'pdf' | 'url' | 'zpl', data, url? }
+await client.cancel(trackingNumber);
 ```
 
 Errors throw a typed `DzshipError` with `.status`, `.code`, `.fields` and
@@ -152,6 +157,8 @@ try {
 
 // later
 $tracking = $client->track($trackingNumber);   // ['status' => …, 'events' => […]]
+$label    = $client->label($trackingNumber);   // ['format' => 'pdf', 'data' => base64] or a 'url'
+$client->cancel($trackingNumber);              // before the courier collects the parcel
 ```
 
 **Laravel**: drop the file in `app/Support/`, add it to `composer.json`
@@ -204,6 +211,8 @@ except DzshipError as e:
 
 # later
 tracking = client.track(tracking_number)   # {"status": …, "events": […]}
+label = client.label(tracking_number)      # {"format": "pdf", "data": base64} or a "url"
+client.cancel(tracking_number)             # before the courier collects the parcel
 ```
 
 Works as-is inside Django views, Flask routes, FastAPI endpoints (wrap in
@@ -242,6 +251,8 @@ end
 
 # later
 tracking = client.track(tracking_number)   # {"status" => …, "events" => […]}
+label = client.label(tracking_number)      # {"format" => "pdf", "data" => base64} or a "url"
+client.cancel(tracking_number)             # before the courier collects the parcel
 ```
 
 Quotes, lookups and the 2026 wilaya handoff:

@@ -20,6 +20,8 @@ creates nothing. Swap in a real courier key when your account is ready.
 | `POST /v1/track` | Status + full event history for a tracking number |
 | `POST /v1/rates` | Delivery and return fees for a route |
 | `POST /v1/desks` | The stop desks a courier runs in one wilaya |
+| `POST /v1/label` | The waybill of a parcel, as a PDF or a link |
+| `POST /v1/cancel` | Cancel a parcel the courier has not collected yet |
 | `GET /v1/couriers` | Every supported courier, its credentials and capabilities |
 | `GET /v1/wilayas` | The 58 wilayas couriers deliver to (`?all=1` for all 69) |
 | `GET /v1/communes` | All 1,541 communes, filterable by wilaya |
@@ -141,6 +143,60 @@ courier, because they route a desk parcel in one of two ways:
 An empty list means the courier has no desk in that wilaya. Desk lists change a
 few times a year, so cache them per courier and wilaya for a day.
 
+## POST /v1/label
+
+The waybill the courier prints for a parcel. Same body as a tracking call. The
+sandbox answers with a one-page PDF, so you can test your print step without an
+account:
+
+```bash
+curl -X POST https://freeship.dzbuild.com/v1/label \
+  -H 'Content-Type: application/json' \
+  -d '{ "courier": "sandbox", "trackingNumber": "DZTEST-1A2B3C" }'
+```
+
+```json
+{ "trackingNumber": "DZTEST-1A2B3C", "format": "pdf", "data": "JVBERi0xLjQK…" }
+```
+
+| `format` | What you get |
+|---|---|
+| `pdf` | The file in `data`, base64-encoded. Most couriers answer this |
+| `url` | A link in `url` (and in `data`). The courier hosts the label; open or download it |
+| `zpl` | A thermal printer file in `data`, base64-encoded |
+
+Couriers sign some label links for a short time, so use a `url` label when you
+get it instead of storing it.
+
+Terminal Delivery prints by the `TD-` number, not by the order id: send the
+`courierReference` you got when you created the parcel. Every other courier
+takes the `trackingNumber`.
+
+A courier with no label call answers `422 NOT_SUPPORTED`: ZR Express, Ecom
+Delivery and MDM Express print from their own dashboards.
+
+## POST /v1/cancel
+
+Cancels a parcel at the courier. Same body as a tracking call:
+
+```bash
+curl -X POST https://freeship.dzbuild.com/v1/cancel \
+  -H 'Content-Type: application/json' \
+  -d '{ "courier": "sandbox", "trackingNumber": "DZTEST-1A2B3C" }'
+```
+
+```json
+{ "trackingNumber": "DZTEST-1A2B3C", "cancelled": true }
+```
+
+A courier accepts a cancel only before it collects the parcel. After that it
+refuses, and you get `424 COURIER_ERROR` with its reason. The Yalidine family,
+Maystro, NOEST, Ecom Delivery and Elogistia can cancel; the others answer
+`422 NOT_SUPPORTED` and you cancel from their dashboard.
+
+`capabilities.label` and `capabilities.cancelShipment` in `GET /v1/couriers`
+say what a courier offers before you call.
+
 ## GET /v1/couriers
 
 ```bash
@@ -226,6 +282,7 @@ anyone who asks.
 | Tracking calls / day / IP | 5,000 |
 | Rate quotes / minute / IP | 60 |
 | Desk lists / minute / IP | 60 |
+| Labels and cancels / minute / IP | 60 |
 
 `GET /v1/wilayas`, `/v1/communes` and `/v1/couriers` are reference data: they
 ship a `Cache-Control` header, so cache them and stop asking.

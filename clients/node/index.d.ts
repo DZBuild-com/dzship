@@ -85,6 +85,19 @@ export interface StopDesk {
   address?: string;
 }
 
+/** A parcel's waybill. `pdf` and `zpl` carry the file in `data` as base64; `url` carries a link. */
+export interface Label {
+  trackingNumber: string;
+  format: 'pdf' | 'zpl' | 'url';
+  data: string;
+  url?: string;
+}
+
+export interface CancelResult {
+  trackingNumber: string;
+  cancelled: true;
+}
+
 export interface CourierInfo {
   key: string;
   name: string;
@@ -142,6 +155,10 @@ export interface Client {
   track(trackingNumber: string): Promise<TrackResult>;
   rates(query: RatesQuery): Promise<RatesResult>;
   desks(wilayaCode: number): Promise<StopDesk[]>;
+  /** The courier's label for a parcel. Couriers without one reject with code `NOT_SUPPORTED`. */
+  label(trackingNumber: string): Promise<Label>;
+  /** Cancel a parcel the courier has not collected yet. */
+  cancel(trackingNumber: string): Promise<CancelResult>;
   wilayas(query?: WilayaQuery): Promise<Wilaya[] | Wilaya>;
   communes(query?: CommuneQuery): Promise<Commune[]>;
   couriers(query?: CourierQuery): Promise<CourierInfo[]>;
