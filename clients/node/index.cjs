@@ -107,6 +107,8 @@ function splitArgs(first, second) {
  * await client.track('yal-ABC123');
  * await client.rates({ toWilaya: 31, deliveryType: 'home' });
  * await client.desks(31);                 // stop desks the customer can pick from
+ * await client.label('yal-ABC123');        // the waybill, as a PDF in base64 or a link
+ * await client.cancel('yal-ABC123');       // before the courier collects it
  *
  * The short form takes the same three things as arguments:
  * const client = dzship('yalidine', { apiId: '…', apiToken: '…' }, { fromWilaya: 16 });
@@ -128,6 +130,8 @@ function dzship(config, shortCredentials, shortOptions) {
     track: (trackingNumber) => request('/v1/track', { ...opts, method: 'POST', body: { ...base, trackingNumber } }),
     rates: (query) => request('/v1/rates', { ...opts, method: 'POST', body: { ...base, query } }),
     desks: (wilayaCode) => request('/v1/desks', { ...opts, method: 'POST', body: { ...base, wilayaCode } }),
+    label: (trackingNumber) => request('/v1/label', { ...opts, method: 'POST', body: { ...base, trackingNumber } }),
+    cancel: (trackingNumber) => request('/v1/cancel', { ...opts, method: 'POST', body: { ...base, trackingNumber } }),
     // Reference data, for building the address form next to the order call.
     wilayas: (query) => dzship.wilayas(query, opts),
     communes: (query) => dzship.communes(query, opts),

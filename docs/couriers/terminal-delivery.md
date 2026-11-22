@@ -45,6 +45,9 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 - **Two ids, two jobs.** `trackingNumber` is the order id, and it is the only
   key `POST /v1/track` accepts for this courier. `courierReference` is the
   `TD-` number printed on the slip, the one your customer sees. Store both.
+- **The label takes the `TD-` number.** `POST /v1/label` with the
+  `courierReference` as `trackingNumber` returns the slip as a PDF. Sent the
+  order id instead, it tells you which number it wants.
 - **`codAmount` includes delivery.** Terminal refuses a total below its own
   delivery price for that commune. Quote with `POST /v1/rates` first if you
   build the total yourself.

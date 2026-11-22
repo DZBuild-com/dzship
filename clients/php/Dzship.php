@@ -90,6 +90,21 @@ class Dzship
     }
 
     /**
+     * The courier's label for a parcel: ['format' => 'pdf'|'zpl'|'url', 'data' => …, 'url' => …].
+     * For 'pdf' and 'zpl', base64_decode($label['data']) is the file.
+     */
+    public function label($trackingNumber)
+    {
+        return $this->post('/v1/label', ['trackingNumber' => $trackingNumber]);
+    }
+
+    /** Cancel a parcel the courier has not collected yet. Returns ['trackingNumber' => …, 'cancelled' => true]. */
+    public function cancel($trackingNumber)
+    {
+        return $this->post('/v1/cancel', ['trackingNumber' => $trackingNumber]);
+    }
+
+    /**
      * Every supported courier with its required credential fields. No credentials needed.
      *
      *   Dzship::couriers();                          // all of them

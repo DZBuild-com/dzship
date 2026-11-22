@@ -1,5 +1,21 @@
 # Changelog
 
+## 2026-11-22 (1.3.1)
+
+**New: `POST /v1/label` and `POST /v1/cancel`.** The waybill of a parcel, as a
+PDF in base64 or as a link when the courier hosts it, and a cancel for a parcel
+the courier has not collected yet. Both take the body of a tracking call. Not
+every courier has a call for them: the [support table](README.md#what-each-courier-supports)
+says which, and the rest answer `422 NOT_SUPPORTED`.
+
+**The sandbox prints and cancels too.** `courier: "sandbox"` returns a one-page
+PDF for a label and accepts a cancel for the numbers it issued, so the whole
+flow runs with no account.
+
+**Clients 1.3.1**: `label()` and `cancel()` in the Node, PHP, Python and Ruby
+clients. `data/couriers.json` now says per courier whether it offers a label
+and a cancel.
+
 ## 2026-11-22
 
 **Two new couriers: Osen Express and Terminal Delivery.** `osenexpress` and

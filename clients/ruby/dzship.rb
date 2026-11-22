@@ -25,6 +25,8 @@ require "uri"
 #   client.track("yal-ABC123")
 #   client.rates(toWilaya: 31, deliveryType: "home")
 #   client.desks(31)        # => stop desks the customer can pick from
+#   client.label(tracking)  # => the waybill, a PDF in base64 or a link
+#   client.cancel(tracking) # => before the courier collects it
 #
 #   DzShip.couriers          # => supported couriers + required credential fields
 #   DzShip.wilayas           # => the 58 shippable wilayas, cache this — it rarely changes
@@ -227,6 +229,16 @@ class DzShip
   # POST /v1/desks: the stop desks of one wilaya. Ship to one with its "id" as stopDeskId and its "communeName".
   def desks(wilaya_code)
     post("/v1/desks", wilayaCode: Integer(wilaya_code))
+  end
+
+  # POST /v1/label: the courier's label. "format" is "pdf", "zpl" or "url"; for the first two, Base64.decode64(label["data"]) is the file.
+  def label(tracking_number)
+    post("/v1/label", trackingNumber: tracking_number)
+  end
+
+  # POST /v1/cancel: cancel a parcel the courier has not collected yet. Returns { "trackingNumber" => ..., "cancelled" => true }.
+  def cancel(tracking_number)
+    post("/v1/cancel", trackingNumber: tracking_number)
   end
 
   private

@@ -1,8 +1,9 @@
 # dzship
 
-**One API for 101 Algerian delivery couriers.** Create a parcel, track it, quote
-the fee and list stop desks with the same code for Yalidine, ZR Express,
-Maystro, NOEST, Osen Express and 96 more.
+**The shipping SDK for Algeria: one API for 101 delivery couriers.** Create a
+parcel, track it, print its label, cancel it, quote the fee and list stop desks
+with the same code for Yalidine, ZR Express, Maystro, NOEST, Osen Express and
+96 more.
 
 *SDK et API de livraison pour l'Algérie : un seul code pour Yalidine, ZR Express,
 Maystro, NOEST, Osen Express, DHD et tous les transporteurs Ecotrack.*
@@ -131,6 +132,8 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 | Track it | `track(trackingNumber)` | `track($trackingNumber)` | `track(tracking_number)` | `POST /v1/track` |
 | Quote the delivery fee | `rates(query)` | `rates($query)` | `rates(query)` | `POST /v1/rates` |
 | List a courier's stop desks | `desks(wilayaCode)` | `desks($wilayaCode)` | `desks(wilaya_code)` | `POST /v1/desks` |
+| Print the label | `label(trackingNumber)` | `label($trackingNumber)` | `label(tracking_number)` | `POST /v1/label` |
+| Cancel a parcel | `cancel(trackingNumber)` | `cancel($trackingNumber)` | `cancel(tracking_number)` | `POST /v1/cancel` |
 | List couriers | `dzship.couriers()` | `Dzship::couriers()` | `dzship.couriers()` | `GET /v1/couriers` |
 | List wilayas | `dzship.wilayas()` | `Dzship::wilayas()` | `dzship.wilayas()` | `GET /v1/wilayas` |
 | List communes | `dzship.communes(16)` | `Dzship::communes(16)` | `dzship.communes(16)` | `GET /v1/communes` |
@@ -183,6 +186,42 @@ the rest: there is no URL to find and nothing to configure.
 
 Is yours missing? [Open an issue](https://github.com/DZBuild-com/dzship/issues/new/choose)
 with its name.
+
+### What each courier supports
+
+Couriers do not all offer the same calls. A label or a cancel that a courier has
+no call for answers `NOT_SUPPORTED`, and you do it from that courier's dashboard.
+
+<!-- couriers:start -->
+| Courier | Create | Track | Rates | Stop desks | Label | Cancel |
+|---|:-:|:-:|:-:|:-:|:-:|:-:|
+| Yalidine, Yalitec, Guepex, Easy & Speed, Economiqua, We Can | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| ZR Express (Procolis) | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ |
+| ZR Express (new platform) | ✅ | ✅ | ✅ | ✅ | ❌ | ❌ |
+| Maystro | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| NOEST | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| DHD, Conexlog, MSM Go and every other Ecotrack courier | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Zimou Express | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Colivraison | ✅ | ✅ | ✅ | ❌ | ✅ | ❌ |
+| Ecom Delivery | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ |
+| Elogistia | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Near Delivery | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| MDM Express | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ |
+| Osen Express | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Terminal Delivery | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ |
+| Sandbox (test courier) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+<!-- couriers:end -->
+
+The table is written from the live courier list by `scripts/sync-couriers.mjs`.
+`GET /v1/couriers` gives the same answer per courier at run time.
+
+```ts
+const label = await shipping.label(trackingNumber);
+if (label.format === 'pdf') await writeFile('label.pdf', Buffer.from(label.data, 'base64'));
+else console.log(label.url); // some couriers hand out a link instead of a file
+
+await shipping.cancel(trackingNumber); // only before the courier collects the parcel
+```
 
 ## What dzship handles for you
 
@@ -315,10 +354,16 @@ takes the token from that courier's dashboard. The
 Oui. Le client PHP fonctionne dans tout projet Composer, et le
 [guide d'intégration](docs/integrating.md) donne un exemple pour chacun.
 
+**Is dzship an SDK or an API?**
+Both. The API is hosted and free, and the SDKs are thin typed clients for it:
+`npm install dzship`, `composer require dzbuild/dzship`, or one file for Python
+and Ruby. You write no courier integration yourself, and there is nothing to
+host.
+
 **Can I switch couriers without rewriting my code?**
 Yes, for creating, tracking, quoting and listing desks. The courier key and the
-credentials change, the rest of your code stays. `GET /v1/couriers` says what
-each courier supports.
+credentials change, the rest of your code stays. Labels and cancels depend on
+the courier: the [support table](#what-each-courier-supports) says which.
 
 **Is there a test mode?**
 The `sandbox` courier. No account, no credentials, nothing created.

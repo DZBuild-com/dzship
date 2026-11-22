@@ -51,6 +51,21 @@ test('a courier refusal carries the courier message and its code', async () => {
   });
 });
 
+test('label and cancel send the tracking number to their own routes', async () => {
+  const calls = stubFetch(200, { trackingNumber: 'DZTEST-1', format: 'pdf', data: 'JVBERi0=' });
+  const client = dzship('sandbox');
+  const label = await client.label('DZTEST-1');
+  await client.cancel('DZTEST-1');
+  assert.equal(label.format, 'pdf');
+  assert.deepEqual(
+    calls.map((c) => [c.url, c.body]),
+    [
+      ['https://freeship.dzbuild.com/v1/label', { courier: 'sandbox', trackingNumber: 'DZTEST-1' }],
+      ['https://freeship.dzbuild.com/v1/cancel', { courier: 'sandbox', trackingNumber: 'DZTEST-1' }],
+    ],
+  );
+});
+
 test('a courier is required', () => {
   assert.throws(() => dzship({}), TypeError);
   assert.throws(() => dzship(''), TypeError);

@@ -1,6 +1,6 @@
 {
   "name": "dzbuild/dzship",
-  "description": "PHP client for dzship, the free shipping API for Algeria: create and track COD parcels with 101 couriers (Yalidine, ZR Express, Maystro, NOEST, Osen Express, DHD and every Ecotrack courier) through one request shape.",
+  "description": "Shipping SDK for Algeria: the PHP client for dzship, the free API. Create, track, label and cancel COD parcels with 101 couriers (Yalidine, ZR Express, Maystro, NOEST, Osen Express, DHD and every Ecotrack courier) through one request shape.",
   "type": "library",
   "license": "MIT",
   "keywords": ["algeria", "algerie", "shipping", "delivery", "livraison", "cod", "yalidine", "zr-express", "maystro", "noest", "ecotrack", "dhd", "laravel", "woocommerce", "wilaya"],

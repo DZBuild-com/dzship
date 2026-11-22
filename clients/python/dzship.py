@@ -111,6 +111,14 @@ class Dzship:
         """The stop desks of one wilaya. Ship to one with its "id" as stopDeskId and its "communeName"."""
         return self._post("/v1/desks", {"wilayaCode": int(wilaya_code)})
 
+    def label(self, tracking_number):
+        """The courier's label: {"format": "pdf" | "zpl" | "url", "data": …}. For pdf and zpl, base64.b64decode(label["data"]) is the file."""
+        return self._post("/v1/label", {"trackingNumber": tracking_number})
+
+    def cancel(self, tracking_number):
+        """Cancel a parcel the courier has not collected yet. Returns {"trackingNumber": …, "cancelled": True}."""
+        return self._post("/v1/cancel", {"trackingNumber": tracking_number})
+
     def _post(self, path, extra):
         # The sandbox courier takes no credentials; every other one names what it needs.
         body = {"courier": self.courier}

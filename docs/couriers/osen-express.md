@@ -62,6 +62,7 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
   to quote from another origin.
 - **A failed attempt is not a return.** `delivery_attempted` means the driver
   will try again. `return_in_transit` follows only when Osen gives up.
+- **Labels.** `POST /v1/label` returns the slip as a PDF.
 - **No cancel through the API.** Cancel from the Osen Express dashboard.
 
 Statuses map to the [canonical vocabulary](../statuses.md). Full request and
