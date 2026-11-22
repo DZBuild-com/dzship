@@ -10,7 +10,7 @@ Maystro, NOEST, Osen Express, DHD et tous les transporteurs Ecotrack.*
 
 [![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com) [![couriers](https://img.shields.io/badge/couriers-101-0a7d33)](data/couriers.json) [![license](https://img.shields.io/badge/license-MIT-666)](LICENSE)
 
-**[Documentation](https://freeship.dzbuild.com/docs)** · **[API reference](docs/endpoints.md)** · **[MCP server](#use-it-from-an-ai-assistant)** · **[Couriers](#couriers)** · **[Wilaya dataset](#wilaya-and-commune-dataset)** · **[FAQ](#faq)**
+**[Documentation](https://freeship.dzbuild.com/docs)** · **[API reference](docs/endpoints.md)** · **[MCP server](#use-it-from-an-ai-assistant)** · **[Couriers](#couriers)** · **[Wilaya dataset](#wilaya-and-commune-dataset)** · **[FAQ](#faq)** · **[Français](README.fr.md)**
 
 ## Install
 
