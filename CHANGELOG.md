@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-11-22 (MCP server)
+
+**New: an MCP server at `https://freeship.dzbuild.com/mcp`.** Streamable HTTP,
+no login, no session. Eight tools run the API's own calls: `list_couriers`,
+`list_wilayas`, `list_communes`, `create_parcel`, `track_parcel`, `get_rates`,
+`list_stop_desks` and `cancel_parcel`. A client can keep courier credentials in
+an `X-Courier-Credentials` header of the connection, a JSON object keyed by
+courier key, so they stay out of the conversation. Labels stay on
+`POST /v1/label`: a PDF is no use inside a conversation. Setup for Claude Code,
+Cursor and VS Code is in the [MCP guide](https://freeship.dzbuild.com/docs/mcp).
+
 ## 2026-11-22 (1.3.1)
 
 **New: `POST /v1/label` and `POST /v1/cancel`.** The waybill of a parcel, as a
