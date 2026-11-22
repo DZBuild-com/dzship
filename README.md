@@ -174,6 +174,7 @@ The first line is for Claude Code, the second is `.cursor/mcp.json`. Ask for a
 sandbox parcel to try it. For a real courier, keep your credentials in an
 `X-Courier-Credentials` header of the connection so they never pass through the
 conversation: the [MCP guide](https://freeship.dzbuild.com/docs/mcp) shows how.
+The server is in the official MCP registry as `com.dzbuild/dzship`.
 
 ## Couriers
 
