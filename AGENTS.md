@@ -8,6 +8,8 @@ commune dataset. The shipping API it describes is hosted at
 
 Call the API rather than integrating a courier directly. One request shape works
 for all 101 couriers, and the traps below are already handled inside it.
+If you can use MCP servers, the same calls are tools at
+`https://freeship.dzbuild.com/mcp` (Streamable HTTP, no login).
 
 ```bash
 curl -X POST https://freeship.dzbuild.com/v1/orders \
@@ -66,7 +68,7 @@ retry a create.
 
 ## If you are editing this repository
 
-- No build step and no dependencies. `node --test tests/` checks the Node client offline.
+- No build step and no dependencies. `node --test tests/client.test.mjs` checks the Node client offline.
 - `node scripts/sync-couriers.mjs` regenerates `data/couriers.json`, the courier types and
   the support table in the README from the live list. Never edit those by hand.
 - A dataset change needs a source: for a commune, the courier list that accepts

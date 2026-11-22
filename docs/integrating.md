@@ -334,6 +334,19 @@ Swapping courier = swapping the `courier` key and the `credentials` shape —
 and the [courier field guides](../README.md#start-here) explain how each
 network behaves.
 
+## From an AI assistant (MCP)
+
+The API is also an MCP server at `https://freeship.dzbuild.com/mcp`. A client
+that speaks Streamable HTTP gets tools for the calls above, with no login:
+
+```bash
+claude mcp add --transport http dzship https://freeship.dzbuild.com/mcp
+```
+
+The [MCP guide](https://freeship.dzbuild.com/docs/mcp) has the Cursor and VS Code
+settings and shows how to keep courier credentials in a header of the
+connection instead of the conversation.
+
 ## Errors and fair use
 
 | HTTP | `error.code` | What to do |

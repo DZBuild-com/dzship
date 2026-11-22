@@ -10,7 +10,7 @@ Maystro, NOEST, Osen Express, DHD et tous les transporteurs Ecotrack.*
 
 [![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com) [![couriers](https://img.shields.io/badge/couriers-101-0a7d33)](data/couriers.json) [![license](https://img.shields.io/badge/license-MIT-666)](LICENSE)
 
-**[Documentation](https://freeship.dzbuild.com/docs)** · **[API reference](docs/endpoints.md)** · **[Couriers](#couriers)** · **[Wilaya dataset](#wilaya-and-commune-dataset)** · **[FAQ](#faq)**
+**[Documentation](https://freeship.dzbuild.com/docs)** · **[API reference](docs/endpoints.md)** · **[MCP server](#use-it-from-an-ai-assistant)** · **[Couriers](#couriers)** · **[Wilaya dataset](#wilaya-and-commune-dataset)** · **[FAQ](#faq)**
 
 ## Install
 
@@ -155,6 +155,25 @@ dzship('yalidine', { token: '…' });
 
 A courier chosen at runtime, from a settings form for example, still works: pass
 the string and any credential map.
+
+## Use it from an AI assistant
+
+dzship is also an MCP server. Claude Code, Cursor, VS Code and any other MCP
+client can find a courier, create a parcel, track it, quote its fee and cancel
+it, with no login:
+
+```bash
+claude mcp add --transport http dzship https://freeship.dzbuild.com/mcp
+```
+
+```json
+{ "mcpServers": { "dzship": { "url": "https://freeship.dzbuild.com/mcp" } } }
+```
+
+The first line is for Claude Code, the second is `.cursor/mcp.json`. Ask for a
+sandbox parcel to try it. For a real courier, keep your credentials in an
+`X-Courier-Credentials` header of the connection so they never pass through the
+conversation: the [MCP guide](https://freeship.dzbuild.com/docs/mcp) shows how.
 
 ## Couriers
 
@@ -313,6 +332,7 @@ references and the spelling traps.
 |---|---|
 | [Integrating dzship](docs/integrating.md) | Laravel, WooCommerce, Django, Rails, Google Sheets and raw HTTP, copy-paste ready |
 | [API reference](docs/endpoints.md) | Every endpoint and field, errors, rate limits |
+| [MCP server](https://freeship.dzbuild.com/docs/mcp) | Connecting an assistant, the eight tools, where credentials go |
 | [Choosing a courier](docs/choosing-a-courier.md) | Coverage, stop desks, exchanges and API quality per courier |
 | [Delivery statuses](docs/statuses.md) | One status vocabulary, with French and Arabic labels |
 | [Cash on delivery](docs/cash-on-delivery.md) | Fees, returns, the deep-south surcharge, confirmation calls |
@@ -364,6 +384,10 @@ host.
 Yes, for creating, tracking, quoting and listing desks. The courier key and the
 credentials change, the rest of your code stays. Labels and cancels depend on
 the courier: the [support table](#what-each-courier-supports) says which.
+
+**Is there an MCP server for Algerian couriers?**
+Yes: `https://freeship.dzbuild.com/mcp`, over Streamable HTTP and with no
+login. Its tools are the API's own calls, so it covers the same 101 couriers.
 
 **Is there a test mode?**
 The `sandbox` courier. No account, no credentials, nothing created.
