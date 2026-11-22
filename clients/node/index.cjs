@@ -11,8 +11,8 @@ const GATEWAY = 'https://freeship.dzbuild.com';
 
 class DzshipError extends Error {
   /**
-   * @param {number} status HTTP status (400, 422, 429, 502, 503…)
-   * @param {string} code machine code: invalid_input, invalid_phone, courier_error, rate_limited, overloaded…
+   * @param {number} status HTTP status (400, 422, 424, 429, 503…)
+   * @param {string} code machine code: VALIDATION_ERROR, invalid_phone, COURIER_ERROR, rate_limited, overloaded…
    * @param {string} message human-readable explanation
    * @param {object|undefined} fields per-field validation errors (on invalid_input)
    * @param {number|undefined} retryAfter seconds to wait (on rate_limited / overloaded)
@@ -107,8 +107,15 @@ function splitArgs(first, second) {
  * await client.track('yal-ABC123');
  * await client.rates({ toWilaya: 31, deliveryType: 'home' });
  * await client.desks(31);                 // stop desks the customer can pick from
+ *
+ * The short form takes the same three things as arguments:
+ * const client = dzship('yalidine', { apiId: '…', apiToken: '…' }, { fromWilaya: 16 });
  */
-function dzship({ courier, credentials, options, gateway = GATEWAY, timeoutMs } = {}) {
+function dzship(config, shortCredentials, shortOptions) {
+  const { courier, credentials, options, gateway = GATEWAY, timeoutMs } =
+    typeof config === 'string'
+      ? { courier: config, credentials: shortCredentials, options: shortOptions }
+      : config || {};
   if (!courier) {
     throw new TypeError('dzship({ courier }) — courier is required');
   }

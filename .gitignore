@@ -2,3 +2,6 @@
 node_modules/
 __pycache__/
 site/
+build/
+*.egg-info/
+vendor/

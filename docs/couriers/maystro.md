@@ -39,13 +39,13 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 
 - **Duplicate policy**: Maystro rejects a second order for the same customer
   name + phone on the same day. This is deliberate on their side (anti-fraud,
-  anti-double-submit). You'll get a clear `courier_error` explaining it. Handle
+  anti-double-submit). You'll get a clear `COURIER_ERROR` explaining it. Handle
   it in your UI rather than retrying; retries will keep failing until the next
   day.
 - **Commune IDs**: Maystro's API doesn't take commune names, it takes internal
   numeric commune IDs. You still send `communeName` as a string like with every
   other courier; the resolution to Maystro's ID happens inside dzship. If the
-  name doesn't resolve, you'll get a `courier_error` naming the commune, which
+  name doesn't resolve, you'll get a `VALIDATION_ERROR` naming the commune, which
   almost always means a spelling mismatch with the official list.
 - **Status codes**: Maystro reports status as bare numbers, and the numbering
   is not intuitive; more than one integration in the wild has shown "delivered"

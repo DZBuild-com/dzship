@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-11-22
+
+**Two new couriers: Osen Express and Terminal Delivery.** `osenexpress` and
+`terminaldelivery`, one token each. Osen orders are validated in the same call
+that creates them, and its amounts must be multiples of 10 DZD. Terminal returns
+two ids: the order id you track with, and the `TD-` number on the slip. Guides:
+[Osen Express](docs/couriers/osen-express.md),
+[Terminal Delivery](docs/couriers/terminal-delivery.md). That makes 101 couriers.
+
+**A courier refusal now answers HTTP 424, and you can read why.** `COURIER_ERROR`
+and `HTTP_ERROR` used to answer 502, and a 502 reached most callers as an empty
+error page with no JSON. The `error.code` values are unchanged. If your code
+branches on status 502, branch on `error.code` instead.
+
+**Typed couriers in the Node client (1.3.0).** `courier` completes to every
+courier key, and `credentials` is checked against that courier's fields at
+compile time. There is a short form too: `dzship('yalidine', { apiId, apiToken })`.
+
+**`composer require dzbuild/dzship`** for PHP and
+`pip install git+https://github.com/DZBuild-com/dzship.git` for Python. The
+single files in `clients/` still work on their own.
+
+**`data/couriers.json`**: every courier key with its name, platform, aliases,
+credential fields and what it can do. The same list `GET /v1/couriers` serves,
+for a dropdown or a settings form.
+
 ## 2026-09-23
 
 **New: `POST /v1/desks`.** The stop desks a courier runs in one wilaya, with the

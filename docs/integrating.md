@@ -12,8 +12,8 @@ Full request/response reference: [freeship.dzbuild.com/docs/api](https://freeshi
 | Stack | Fastest path |
 |---|---|
 | Node.js 18+ | `npm install dzship` → [Node client](#nodejs) |
-| PHP (plain, Laravel, WooCommerce) | copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) → [PHP](#php) |
-| Python (Django, Flask, FastAPI, scripts) | copy [`clients/python/dzship.py`](../clients/python/dzship.py) → [Python](#python) |
+| PHP (plain, Laravel, WooCommerce) | `composer require dzbuild/dzship`, or copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) → [PHP](#php) |
+| Python (Django, Flask, FastAPI, scripts) | `pip install git+https://github.com/DZBuild-com/dzship.git`, or copy [`clients/python/dzship.py`](../clients/python/dzship.py) → [Python](#python) |
 | Ruby (Rails, Sinatra, scripts) | copy [`clients/ruby/dzship.rb`](../clients/ruby/dzship.rb) → [Ruby](#ruby) |
 | Google Sheets / Apps Script | [Apps Script snippet](#google-sheets--apps-script) |
 | Anything else | [raw curl / HTTP](#raw-http-any-language) |
@@ -49,6 +49,8 @@ const client = dzship({
   credentials: { apiId: process.env.YAL_ID, apiToken: process.env.YAL_TOKEN },
   options: { fromWilaya: 16 },         // optional
 });
+// the same thing, shorter:
+// const client = dzship('yalidine', { apiId: '…', apiToken: '…' }, { fromWilaya: 16 });
 
 // 1. quote the fee (optional)
 const quote = await client.rates({ toWilaya: 31, deliveryType: 'home' });
@@ -101,14 +103,24 @@ const all69    = await dzship.wilayas({ all: true }); // 2026 division, each wit
 ```
 
 TypeScript types ship with the package (`Order`, `RatesQuery`, `DzshipError`…).
+The `courier` field completes to every courier key, and `credentials` is typed
+per courier: pass `token` to Yalidine and the compiler tells you it wants
+`apiId` and `apiToken`.
 
 ## PHP
 
-Copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) into your project
-(one file, needs only ext-curl — works on shared hosting):
+With Composer:
+
+```bash
+composer require dzbuild/dzship
+```
+
+Or copy [`clients/php/Dzship.php`](../clients/php/Dzship.php) into your project
+(one file, needs only ext-curl, works on shared hosting) and `require` it
+instead of the autoloader:
 
 ```php
-require __DIR__ . '/Dzship.php';
+require __DIR__ . '/vendor/autoload.php';   // or: require __DIR__ . '/Dzship.php';
 
 $client = new Dzship('yalidine', [
     'apiId'    => getenv('YAL_ID'),
@@ -151,7 +163,13 @@ hook — the recipient maps from the order's shipping fields, and
 
 ## Python
 
-Copy [`clients/python/dzship.py`](../clients/python/dzship.py) into your project
+Install it from the repository:
+
+```bash
+pip install git+https://github.com/DZBuild-com/dzship.git
+```
+
+Or copy [`clients/python/dzship.py`](../clients/python/dzship.py) into your project
 (one file, standard library only, Python 3.8+):
 
 ```python
@@ -311,7 +329,8 @@ network behaves.
 |---|---|---|
 | 400 | `VALIDATION_ERROR` | Fix the fields listed in `error.fields` |
 | 422 | `invalid_phone` | Not a valid Algerian mobile — correct the number |
-| 422 / 502 | `NOT_SUPPORTED` / `COURIER_ERROR` | The courier rejected it — read `message` (bad credentials, unknown commune, missing stop desk…) |
+| 422 | `NOT_SUPPORTED` | That courier does not offer this operation |
+| 424 | `COURIER_ERROR` / `HTTP_ERROR` | The courier refused it or did not answer. Read `message`: rejected credentials, unknown commune, missing stop desk |
 | 429 | `rate_limited` | Wait `retry-after` seconds (exposed by all clients) |
 | 503 | `overloaded` | Retry after a few seconds |
 

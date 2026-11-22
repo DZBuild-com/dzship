@@ -1,7 +1,7 @@
 {
   "name": "dzship",
-  "version": "1.2.0",
-  "description": "Client for dzship, the free shipping API for Algeria. Create and track COD parcels with 99 couriers (Yalidine, ZR Express, Maystro, NOEST, DHD, Conexlog and every Ecotrack courier) through one request shape. Includes the wilaya and commune dataset.",
+  "version": "1.3.0",
+  "description": "Typed client for dzship, the free shipping API for Algeria. Create and track COD parcels with 101 couriers (Yalidine, ZR Express, Maystro, NOEST, Osen Express, Terminal Delivery, DHD and every Ecotrack courier) through one request shape.",
   "license": "MIT",
   "homepage": "https://freeship.dzbuild.com",
   "repository": {
@@ -37,6 +37,11 @@
     "maystro",
     "noest",
     "ecotrack",
+    "osen-express",
+    "terminal-delivery",
+    "zimou",
+    "sdk",
+    "typescript",
     "dhd",
     "conexlog",
     "wilaya",

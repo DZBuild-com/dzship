@@ -1,5 +1,9 @@
 /** dzship — typed client for the free Algerian shipping API at freeship.dzbuild.com */
 
+import type { CourierCredentials, CourierKey } from './couriers';
+
+export type { CourierCredentials, CourierKey };
+
 export interface Recipient {
   fullName: string;
   phone: string;
@@ -25,10 +29,7 @@ export interface Order {
 }
 
 export interface AdapterOptions {
-  /**
-   * Tenant URL for the generic `ecotrack` courier, e.g. https://courier.ecotrack.dz.
-   * Every other courier has its own key and needs no URL.
-   */
+  /** Your tenant URL, for the generic `ecotrack` key only. A named courier takes none. */
   baseUrl?: string;
   /** Origin wilaya code (1-58) */
   fromWilaya?: number;
@@ -46,6 +47,10 @@ export interface RatesQuery {
 
 export interface CreateOrderResult {
   trackingNumber: string;
+  /** A second id some couriers return, such as the number printed on the slip. */
+  courierReference?: string;
+  /** Your order reference, or the one dzship generated. */
+  reference?: string;
   status: string;
   [k: string]: unknown;
 }
@@ -53,6 +58,7 @@ export interface CreateOrderResult {
 export interface TrackingEvent {
   status: string;
   rawStatus: string;
+  description?: string;
   timestamp: string;
 }
 
@@ -64,7 +70,7 @@ export interface TrackResult {
 
 export interface RatesResult {
   deliveryFee: number;
-  returnFee: number;
+  returnFee?: number;
   total: number;
   currency: string;
   [k: string]: unknown;
@@ -86,8 +92,6 @@ export interface CourierInfo {
   aliases?: string[];
   requiredCredentials: string[];
   capabilities: Record<string, boolean>;
-  /** The endpoint dzship uses for this courier, when it is fixed. */
-  endpoint?: string;
   /** True for the generic Ecotrack key: you name the tenant yourself. */
   requiresBaseUrl?: boolean;
   baseUrlSuffixes?: string[];
@@ -143,16 +147,30 @@ export interface Client {
   couriers(query?: CourierQuery): Promise<CourierInfo[]>;
 }
 
-export interface ClientConfig {
-  courier: string;
-  /** That courier's own fields. Omit for the sandbox courier, which needs none. */
-  credentials?: Record<string, string>;
+/** A courier key, or any name the API resolves ("osen express", "procolis"). */
+export type CourierName = CourierKey | (string & {});
+
+/** The credential fields of one courier; a free-form map when the name is only known at runtime. */
+export type CredentialsOf<K extends string> = K extends CourierKey
+  ? CourierCredentials[K]
+  : Record<string, string>;
+
+export type ClientConfig<K extends string = string> = {
+  courier: K;
   options?: AdapterOptions;
   gateway?: string;
   timeoutMs?: number;
-}
+} & (K extends 'sandbox'
+  ? { credentials?: Record<string, never> }
+  : { credentials: CredentialsOf<K> });
 
-declare function dzship(config: ClientConfig): Client;
+declare function dzship<K extends CourierName>(config: ClientConfig<K>): Client;
+declare function dzship<K extends CourierName>(
+  courier: K,
+  ...rest: K extends 'sandbox'
+    ? [credentials?: Record<string, never>, options?: AdapterOptions]
+    : [credentials: CredentialsOf<K>, options?: AdapterOptions]
+): Client;
 
 declare namespace dzship {
   function couriers(query?: CourierQuery, opts?: RequestOptions): Promise<CourierInfo[]>;
