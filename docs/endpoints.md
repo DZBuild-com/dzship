@@ -149,9 +149,10 @@ curl 'https://freeship.dzbuild.com/v1/couriers?platform=ecotrack'
 curl 'https://freeship.dzbuild.com/v1/couriers?q=rocket'
 ```
 
-Each entry carries `key`, `name`, `platform`, `requiredCredentials`,
-`capabilities`, and either `endpoint` (dzship knows the address) or
-`requiresBaseUrl` with the host suffixes you may name.
+Each entry carries `key`, `name`, `platform`, `requiredCredentials` and
+`capabilities`. The generic `ecotrack` key also carries `requiresBaseUrl` with
+the host suffix you may name. The same list is in the repository as
+[`data/couriers.json`](../data/couriers.json).
 
 ## GET /v1/wilayas
 
@@ -206,8 +207,8 @@ One envelope everywhere:
 | 422 | `invalid_phone` | Not a valid Algerian mobile |
 | 422 | `NOT_SUPPORTED` | That courier does not implement this operation |
 | 429 | `rate_limited` | Wait `Retry-After` seconds |
-| 502 | `COURIER_ERROR` | The courier rejected it — the message is theirs |
-| 502 | `HTTP_ERROR` | The courier endpoint failed or timed out |
+| 424 | `COURIER_ERROR` | The courier refused it: a rejected token, an unknown commune, a duplicate. The message says which |
+| 424 | `HTTP_ERROR` | The courier failed or timed out |
 | 503 | `overloaded` | Momentary capacity guard — retry shortly |
 
 Error messages never contain the address dzship connected to. That is

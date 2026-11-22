@@ -3,7 +3,7 @@
   "info": {
     "title": "dzship — the free shipping API for Algeria",
     "version": "1.2.0",
-    "summary": "Create and track cash-on-delivery parcels with 99 Algerian couriers.",
+    "summary": "Create and track cash-on-delivery parcels with 101 Algerian couriers.",
     "description": "One request shape for every Algerian courier. No signup and no API key: you send your own courier credentials with each call and they are never stored. Try it with courier \"sandbox\", which needs no credentials and creates nothing.",
     "contact": {
       "name": "DZBuild",
@@ -69,7 +69,7 @@
                       "baseUrl": {
                         "type": "string",
                         "format": "uri",
-                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and takes no URL."
                       },
                       "fromWilaya": {
                         "type": "integer",
@@ -275,8 +275,8 @@
               }
             }
           },
-          "429": {
-            "description": "Rate limited — wait Retry-After seconds",
+          "424": {
+            "description": "The courier rejected the parcel or could not be reached",
             "content": {
               "application/json": {
                 "schema": {
@@ -308,8 +308,8 @@
               }
             }
           },
-          "502": {
-            "description": "The courier rejected the parcel or could not be reached",
+          "429": {
+            "description": "Rate limited — wait Retry-After seconds",
             "content": {
               "application/json": {
                 "schema": {
@@ -411,7 +411,7 @@
                       "baseUrl": {
                         "type": "string",
                         "format": "uri",
-                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and takes no URL."
                       },
                       "fromWilaya": {
                         "type": "integer",
@@ -504,8 +504,8 @@
               }
             }
           },
-          "429": {
-            "description": "Rate limited",
+          "424": {
+            "description": "Courier error",
             "content": {
               "application/json": {
                 "schema": {
@@ -537,8 +537,8 @@
               }
             }
           },
-          "502": {
-            "description": "Courier error",
+          "429": {
+            "description": "Rate limited",
             "content": {
               "application/json": {
                 "schema": {
@@ -607,7 +607,7 @@
                       "baseUrl": {
                         "type": "string",
                         "format": "uri",
-                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and takes no URL."
                       },
                       "fromWilaya": {
                         "type": "integer",
@@ -743,8 +743,8 @@
               }
             }
           },
-          "429": {
-            "description": "Rate limited",
+          "424": {
+            "description": "Courier error",
             "content": {
               "application/json": {
                 "schema": {
@@ -776,8 +776,8 @@
               }
             }
           },
-          "502": {
-            "description": "Courier error",
+          "429": {
+            "description": "Rate limited",
             "content": {
               "application/json": {
                 "schema": {
@@ -848,7 +848,7 @@
                       "baseUrl": {
                         "type": "string",
                         "format": "uri",
-                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and a pinned endpoint."
+                        "description": "Tenant URL, accepted only for the generic \"ecotrack\" courier and only under *.ecotrack.dz. Every other courier has its own key and takes no URL."
                       },
                       "fromWilaya": {
                         "type": "integer",
@@ -977,8 +977,8 @@
               }
             }
           },
-          "429": {
-            "description": "Rate limited",
+          "424": {
+            "description": "Courier error",
             "content": {
               "application/json": {
                 "schema": {
@@ -1010,8 +1010,8 @@
               }
             }
           },
-          "502": {
-            "description": "Courier error",
+          "429": {
+            "description": "Rate limited",
             "content": {
               "application/json": {
                 "schema": {
@@ -1107,9 +1107,6 @@
                         "additionalProperties": {
                           "type": "boolean"
                         }
-                      },
-                      "endpoint": {
-                        "type": "string"
                       },
                       "requiresBaseUrl": {
                         "type": "boolean"
