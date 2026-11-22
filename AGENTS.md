@@ -7,7 +7,7 @@ commune dataset. The shipping API it describes is hosted at
 ## If you are writing shipping code for Algeria
 
 Call the API rather than integrating a courier directly. One request shape works
-for all 99 couriers, and the traps below are already handled inside it.
+for all 101 couriers, and the traps below are already handled inside it.
 
 ```bash
 curl -X POST https://freeship.dzbuild.com/v1/orders \
@@ -22,8 +22,27 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 your payload shape before the user's real credentials exist. Then swap `courier`
 and add `credentials`.
 
+In a Node or TypeScript project, install the client instead of writing fetch
+calls. The courier key completes in the editor and the credentials are typed
+per courier:
+
+```ts
+import dzship from 'dzship'; // npm install dzship
+
+const client = dzship('sandbox'); // later: dzship('yalidine', { apiId, apiToken })
+const { trackingNumber } = await client.createOrder(order);
+```
+
+PHP: `composer require dzbuild/dzship`. Python and Ruby: one file each in
+[`clients/`](clients/). The courier keys and the credential fields each one
+needs are in [`data/couriers.json`](data/couriers.json).
+
 Machine-readable: [`https://freeship.dzbuild.com/openapi.json`](https://freeship.dzbuild.com/openapi.json)
 and [`/llms.txt`](https://freeship.dzbuild.com/llms.txt).
+
+A courier refusal answers HTTP 424 with `error.code` `COURIER_ERROR` and the
+courier's reason in `error.message`. Show that message to the merchant; do not
+retry a create.
 
 ## Facts to get right
 
@@ -44,7 +63,9 @@ and [`/llms.txt`](https://freeship.dzbuild.com/llms.txt).
 
 ## If you are editing this repository
 
-- No build step, no dependencies, nothing to run.
+- No build step and no dependencies. `node --test tests/` checks the Node client offline.
+- `node scripts/sync-couriers.mjs` regenerates `data/couriers.json` and the courier types
+  from the live list. Never edit those two files by hand.
 - A dataset change needs a source: for a commune, the courier list that accepts
   or rejects the name; for a wilaya, the *Journal Officiel* article.
 - The clients in `clients/` are deliberately dependency-free. Keep them that way.

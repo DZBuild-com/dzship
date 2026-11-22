@@ -1,28 +1,109 @@
-# dzship — Algerian shipping, explained for developers
+# dzship
 
-[![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com) [![couriers](https://img.shields.io/badge/couriers-99-0a7d33)](https://freeship.dzbuild.com/v1/couriers) [![license](https://img.shields.io/badge/license-MIT-666)](LICENSE)
+**One API for 101 Algerian delivery couriers.** Create a parcel, track it, quote
+the fee and list stop desks with the same code for Yalidine, ZR Express,
+Maystro, NOEST, Osen Express and 96 more.
 
-**[Documentation](https://freeship.dzbuild.com/docs)** · **[API reference](docs/endpoints.md)** · **[Try it now](#try-it-now-no-account-needed)** · **[Couriers](#your-courier-is-probably-already-in-here)** · **[Wilaya dataset](#free-dataset-58-wilayas-69-wilayas-1541-communes)** · **[freeship.dzbuild.com](https://freeship.dzbuild.com)**
+*SDK et API de livraison pour l'Algérie : un seul code pour Yalidine, ZR Express,
+Maystro, NOEST, Osen Express, DHD et tous les transporteurs Ecotrack.*
 
-Create and track cash-on-delivery parcels with **99 Algerian couriers** through
-one API — Yalidine, ZR Express, Maystro, NOEST, and every courier running on
-Ecotrack. Plus the field notes on how each one actually behaves, and the
-complete wilaya + commune dataset.
+[![npm](https://img.shields.io/npm/v/dzship)](https://www.npmjs.com/package/dzship) [![requests served](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Ffreeship.dzbuild.com%2Fstats&query=%24.totalRequests&label=requests%20served&color=0a7d33)](https://freeship.dzbuild.com) [![couriers](https://img.shields.io/badge/couriers-101-0a7d33)](data/couriers.json) [![license](https://img.shields.io/badge/license-MIT-666)](LICENSE)
 
-The code examples run against **dzship**, the free hosted API at
-**[freeship.dzbuild.com](https://freeship.dzbuild.com)**. No signup, no API key.
-You bring your own courier account credentials per call and they are never
-stored.
+**[Documentation](https://freeship.dzbuild.com/docs)** · **[API reference](docs/endpoints.md)** · **[Couriers](#couriers)** · **[Wilaya dataset](#wilaya-and-commune-dataset)** · **[FAQ](#faq)**
 
-Maintained by [DZBuild](https://dzbuild.com), the e-commerce platform that moves
-real COD orders across all wilayas every day. These guides are the field notes
-from that shipping engine.
+## Install
 
-## Try it now, no account needed
+```bash
+npm install dzship                                           # Node 18+, types included, no dependencies
+composer require dzbuild/dzship                              # PHP 7.2+, ext-curl only
+pip install git+https://github.com/DZBuild-com/dzship.git    # Python 3.8+, standard library only
+```
 
-Every other courier needs a merchant contract before you can send one request.
-This one doesn't exist, so you can start in ten seconds — it validates exactly
-what a real courier validates, and creates nothing:
+Ruby is one file to copy: [`clients/ruby/dzship.rb`](clients/ruby/dzship.rb).
+So are the PHP and Python clients, if you would rather not use a package
+manager. Any other language talks to the same [HTTP API](docs/endpoints.md).
+
+## Send your first parcel
+
+You do not need a courier account to start. The `sandbox` courier takes no
+credentials, checks your order the way a real courier does, and creates
+nothing.
+
+```ts
+import dzship from 'dzship';
+
+const shipping = dzship('sandbox');
+
+const { trackingNumber } = await shipping.createOrder({
+  recipient: {
+    fullName: 'Amine Bouzid',
+    phone: '0551234567',
+    wilayaCode: 16,
+    communeName: 'Bab Ezzouar',
+  },
+  deliveryType: 'home',
+  productList: 'Sneakers x1',
+  codAmount: 4500,
+});
+
+const { status, events } = await shipping.track(trackingNumber);
+```
+
+When your courier account is ready, one line changes:
+
+```ts
+const shipping = dzship('yalidine', { apiId: '…', apiToken: '…' });
+// dzship('zrexpressnew', { apiKey: '…', tenantId: '…' })
+// dzship('osenexpress', { token: '…' })
+// dzship('dhd', { token: '…' })
+```
+
+The order, the tracking result and the status names keep the same shape for
+every courier, so moving a store from one courier to another is that one line.
+
+<details>
+<summary>PHP</summary>
+
+```php
+require __DIR__ . '/vendor/autoload.php';
+
+$shipping = new Dzship('yalidine', ['apiId' => '…', 'apiToken' => '…']);
+
+$parcel = $shipping->createOrder([
+    'recipient' => [
+        'fullName' => 'Amine Bouzid', 'phone' => '0551234567',
+        'wilayaCode' => 16, 'communeName' => 'Bab Ezzouar',
+    ],
+    'deliveryType' => 'home', 'productList' => 'Sneakers x1', 'codAmount' => 4500,
+]);
+
+echo $shipping->track($parcel['trackingNumber'])['status'];
+```
+
+Works in plain PHP, Laravel and WooCommerce. Examples for each are in the
+[integration guide](docs/integrating.md#php).
+</details>
+
+<details>
+<summary>Python</summary>
+
+```python
+from dzship import Dzship
+
+shipping = Dzship("yalidine", {"apiId": "…", "apiToken": "…"})
+
+parcel = shipping.create_order({
+    "recipient": {"fullName": "Amine Bouzid", "phone": "0551234567",
+                  "wilayaCode": 16, "communeName": "Bab Ezzouar"},
+    "deliveryType": "home", "productList": "Sneakers x1", "codAmount": 4500,
+})
+
+print(shipping.track(parcel["trackingNumber"])["status"])
+```
+</details>
+
+<details>
+<summary>curl</summary>
 
 ```bash
 curl -X POST https://freeship.dzbuild.com/v1/orders \
@@ -40,61 +121,39 @@ curl -X POST https://freeship.dzbuild.com/v1/orders \
 ```json
 { "trackingNumber": "DZTEST-1A2B3C", "status": "created", "reference": "FS-…" }
 ```
+</details>
 
-When your Yalidine (or DHD, or Maystro…) credentials arrive, change two fields.
+## What the clients do
 
-## Create a real parcel in 60 seconds
+| | Node | PHP | Python | HTTP |
+|---|---|---|---|---|
+| Create a parcel | `createOrder(order)` | `createOrder($order)` | `create_order(order)` | `POST /v1/orders` |
+| Track it | `track(trackingNumber)` | `track($trackingNumber)` | `track(tracking_number)` | `POST /v1/track` |
+| Quote the delivery fee | `rates(query)` | `rates($query)` | `rates(query)` | `POST /v1/rates` |
+| List a courier's stop desks | `desks(wilayaCode)` | `desks($wilayaCode)` | `desks(wilaya_code)` | `POST /v1/desks` |
+| List couriers | `dzship.couriers()` | `Dzship::couriers()` | `dzship.couriers()` | `GET /v1/couriers` |
+| List wilayas | `dzship.wilayas()` | `Dzship::wilayas()` | `dzship.wilayas()` | `GET /v1/wilayas` |
+| List communes | `dzship.communes(16)` | `Dzship::communes(16)` | `dzship.communes(16)` | `GET /v1/communes` |
 
-```bash
-curl -X POST https://freeship.dzbuild.com/v1/orders \
-  -H 'Content-Type: application/json' \
-  -d '{
-    "courier": "yalidine",
-    "credentials": { "apiId": "YOUR_API_ID", "apiToken": "YOUR_API_TOKEN" },
-    "options": { "fromWilaya": 16 },
-    "order": {
-      "recipient": {
-        "fullName": "Amine Bouzid",
-        "phone": "0551234567",
-        "wilayaCode": 16,
-        "communeName": "Bab Ezzouar"
-      },
-      "deliveryType": "home",
-      "productList": "Sneakers Air x1",
-      "codAmount": 4500
-    }
-  }'
+No signup and no API key. You bring your own courier credentials on each call.
+
+## TypeScript knows your courier
+
+`courier` completes to every courier key in your editor, and the credentials are
+checked against that courier:
+
+```ts
+dzship('noest', { apiToken: '…' });
+//              ~~~~~~~~~~~~~~~~~~ Property 'guid' is missing
+
+dzship('yalidine', { token: '…' });
+//                   ~~~~~ 'token' does not exist in type '{ apiId: string; apiToken: string }'
 ```
 
-```json
-{ "trackingNumber": "yal-ABC123", "status": "created", "reference": "FS-…" }
-```
+A courier chosen at runtime, from a settings form for example, still works: pass
+the string and any credential map.
 
-Swap `"courier"` and `"credentials"` to ship with any other courier. The request
-shape stays the same. Want the customer to pick a stop desk? `POST /v1/desks`
-lists the courier's desks in a wilaya. Full reference:
-[docs/endpoints.md](docs/endpoints.md).
-
-## Start here
-
-The same guides, with search and a browsable API reference, are on
-**[freeship.dzbuild.com/docs](https://freeship.dzbuild.com/docs)**.
-
-| Guide | What it answers |
-|---|---|
-| [API reference](docs/endpoints.md) | Every endpoint and field, errors, rate limits |
-| [Integrating dzship](docs/integrating.md) | Ready-made clients (Node, PHP, Python, Ruby) and copy-paste snippets for every stack |
-| [Choosing a courier](docs/choosing-a-courier.md) | Which delivery company fits your project: coverage, stop-desk, exchanges, API quality |
-| [Wilayas & communes](docs/wilayas-and-communes.md) | The complete dataset, and why Algeria's new 69-wilaya division must not reach a courier yet |
-| [Yalidine](docs/couriers/yalidine.md) | The biggest network. Also Yalitec, Guepex, Easy & Speed, Economiqua, We Can |
-| [ZR Express](docs/couriers/zr-express.md) | Procolis. Strong in the center, simple credential model |
-| [Maystro](docs/couriers/maystro.md) | Fulfillment-style courier with a strict duplicate policy |
-| [NOEST](docs/couriers/noest.md) | Why parcels get stranded if you skip the validation step |
-| [Ecotrack couriers](docs/couriers/ecotrack.md) | DHD, Conexlog, MSM Go, Rocket, World Express and 78 more — one key each |
-| [Delivery statuses](docs/statuses.md) | One status vocabulary for all couriers, with French and Arabic UI labels |
-| [Cash on delivery](docs/cash-on-delivery.md) | COD mechanics: fees, returns, the deep-south surcharge, confirmation calls |
-
-## Your courier is probably already in here
+## Couriers
 
 ```bash
 curl 'https://freeship.dzbuild.com/v1/couriers?q=rocket'
@@ -103,10 +162,12 @@ curl 'https://freeship.dzbuild.com/v1/couriers?q=rocket'
 | Family | `courier` keys | Credentials |
 |---|---|---|
 | Yalidine | `yalidine` `yalitec` `guepex` `easyandspeed` `economiqua` `wecan` | `apiId`, `apiToken` |
-| ZR Express (Procolis) | `zrexpress` — also answers to `abexexpress`, `leopardexpress`, `colilog`, `flashdelivery` | `token`, `key` |
+| ZR Express (Procolis) | `zrexpress`, which also answers to `abexexpress`, `leopardexpress`, `colilog`, `flashdelivery` | `token`, `key` |
 | ZR Express (new platform) | `zrexpressnew` | `apiKey`, `tenantId` |
 | Maystro | `maystro` | `apiKey` |
 | NOEST | `noest` | `apiToken`, `guid` |
+| Osen Express | `osenexpress` | `token` |
+| Terminal Delivery | `terminaldelivery` | `token` |
 | Ecotrack (82 couriers) | `dhd` `conexlog` `msmgo` `rocketdelivery` `worldexpress` `andersondelivery` … | `token` |
 | Zimou Express | `zimou` | `token` |
 | Colivraison | `colivraison` | `publicKey`, `token` |
@@ -116,108 +177,168 @@ curl 'https://freeship.dzbuild.com/v1/couriers?q=rocket'
 | MDM Express | `mdm` | `apiKey` |
 | Test courier | `sandbox` | none |
 
-You name the courier; dzship keeps the address. Nothing to look up, nothing to
-configure — and no way for a request to point the server at somewhere a courier
-does not own.
+Every key, with its credential fields and what it supports, is in
+[`data/couriers.json`](data/couriers.json). You name the courier and dzship does
+the rest: there is no URL to find and nothing to configure.
 
-## Or skip the raw HTTP — ready-made clients
+Is yours missing? [Open an issue](https://github.com/DZBuild-com/dzship/issues/new/choose)
+with its name.
 
-The [`clients/`](clients/) directory has MIT-licensed clients that wrap the same
-calls, with typed errors and retry-after handling built in:
+## What dzship handles for you
 
-- **Node.js** — [`npm install dzship`](https://www.npmjs.com/package/dzship)
-  (zero dependencies, TypeScript types included):
+Each Algerian courier has its own auth, field names and status words, and most
+of the failures are quiet ones. These are the ones dzship absorbs:
 
-  ```js
-  import dzship from 'dzship';
+- NOEST and Osen Express ignore a parcel until a second call validates it.
+  `createOrder` makes both calls.
+- Maystro, MDM, Osen and Terminal address parcels by their own commune ids. You
+  send a commune name.
+- Statuses arrive in French, in Arabic or as bare numbers. You get one
+  [status vocabulary](docs/statuses.md), with labels ready for a French or Arabic UI.
+- A commune spelled differently from the courier's list strands a parcel. The
+  [dataset](#wilaya-and-commune-dataset) uses the spellings couriers accept.
+- Algeria has 69 wilayas in law since April 2026 and couriers still accept 58.
+  Every new wilaya tells you which code to ship with.
 
-  const client = dzship({ courier: 'yalidine', credentials: { apiId: '…', apiToken: '…' } });
-  const { trackingNumber } = await client.createOrder({ /* recipient, productList, codAmount… */ });
-  const communes = await client.communes(16);
-  ```
+The courier guides list what each one does that the others do not:
+[Yalidine](docs/couriers/yalidine.md) ·
+[ZR Express](docs/couriers/zr-express.md) ·
+[Maystro](docs/couriers/maystro.md) ·
+[NOEST](docs/couriers/noest.md) ·
+[Osen Express](docs/couriers/osen-express.md) ·
+[Terminal Delivery](docs/couriers/terminal-delivery.md) ·
+[Ecotrack couriers](docs/couriers/ecotrack.md)
 
-- **PHP** — copy the single file [`clients/php/Dzship.php`](clients/php/Dzship.php)
-  (ext-curl only, shared-hosting friendly).
-- **Python** — copy the single file [`clients/python/dzship.py`](clients/python/dzship.py)
-  (standard library only, 3.8+).
-- **Ruby** — copy the single file [`clients/ruby/dzship.rb`](clients/ruby/dzship.rb)
-  (standard library only, Ruby 3.0+).
+## When a courier refuses a parcel
 
-The [integration guide](docs/integrating.md) has full examples for Laravel,
-WooCommerce, Django, Rails, Google Sheets and raw HTTP in any language.
+The clients throw one error type with a machine code and the courier's own
+reason:
 
-## Free dataset: 58 wilayas, 69 wilayas, 1,541 communes
+```ts
+import dzship, { DzshipError } from 'dzship';
 
-Most Algerian projects rebuild this list by hand, badly. It is in
-[`data/`](data/) as JSON and CSV — French + Arabic names, numeric codes:
+try {
+  await shipping.createOrder(order);
+} catch (e) {
+  if (e instanceof DzshipError && e.code === 'COURIER_ERROR') {
+    console.log(e.message); // "[osenexpress] the token was refused (HTTP 401): check the API token (osn_...)"
+  }
+}
+```
+
+| HTTP | `code` | Meaning |
+|---|---|---|
+| 400 | `VALIDATION_ERROR` | A field is wrong. `fields` says which |
+| 422 | `invalid_phone` | Not an Algerian mobile number |
+| 424 | `COURIER_ERROR` | The courier refused: rejected credentials, unknown commune, duplicate order |
+| 429 | `rate_limited` | Wait `retryAfter` seconds |
+
+A create is never retried for you, because a retried create is a second parcel.
+The full table is in the [API reference](docs/endpoints.md#errors).
+
+## Wilaya and commune dataset
+
+Most Algerian projects rebuild this list by hand. It is in [`data/`](data/) as
+JSON and CSV, with French and Arabic names and numeric codes, free to use with
+no attribution:
 
 | File | Contents |
 |---|---|
 | [`wilayas.json`](data/wilayas.json) | The 58 wilayas couriers deliver to |
 | [`communes.json`](data/communes.json) · [`.csv`](data/communes.csv) | All 1,541 communes |
+| [`couriers.json`](data/couriers.json) | Every courier key with its credential fields |
 | [`wilayas-2026.json`](data/wilayas-2026.json) | All 69 wilayas of the 2026 division, each with `courierSupported` and `shipAs` |
 | [`new-wilayas-2026.json`](data/new-wilayas-2026.json) | The 11 new wilayas with the 108 communes transferred into them |
-| [`communes-moved-2026.csv`](data/communes-moved-2026.csv) | Old code → new code, as a flat join |
+| [`communes-moved-2026.csv`](data/communes-moved-2026.csv) | Old code to new code, as a flat join |
 
 ```js
-const wilayas = await fetch(
-  "https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/wilayas.json"
-).then((r) => r.json());
+const communes = await dzship.communes(16); // or fetch the raw file:
+// https://raw.githubusercontent.com/DZBuild-com/dzship/main/data/communes.json
 ```
 
-Free to use in any project, no attribution needed.
-
-**Algeria became 69 wilayas in April 2026** — and no courier accepts a code
-above 58 yet, because the parent wilayas keep running the new territories until
-the handover completes. Send `wilayaCode: 60` today and the parcel is rejected.
-So the two lists are kept apart on purpose, and every new wilaya tells you what
-to ship it as:
+Send `wilayaCode: 60` to a courier today and the parcel is rejected, because the
+parent wilayas still run the new territories. Ask for a new wilaya and you get
+the code to use instead:
 
 ```bash
 curl https://freeship.dzbuild.com/v1/wilayas?68
 # { "code": 68, "nameFr": "Bou Saâda", "courierSupported": false, "shipAs": 28, … }
 ```
 
-The [wilayas & communes guide](docs/wilayas-and-communes.md) has the gazette
-references, the full table, and the spelling traps (`Aïn Ouessara` in the law,
-`Ain Oussera` in every courier's database).
+The [wilayas and communes guide](docs/wilayas-and-communes.md) has the gazette
+references and the spelling traps.
 
-## Why couriers are the hard part
+## Guides
 
-Every Algerian courier ships its own API: different auth, different field names,
-statuses in French, Arabic, or bare numbers, and documentation that ranges from
-thin to wrong. The failure modes are quiet ones. A commune spelled differently
-than the courier's list, a validation step the docs never mention, a status code
-that looks inverted. Your integration works in the demo and strands parcels in
-production.
+| Guide | What it answers |
+|---|---|
+| [Integrating dzship](docs/integrating.md) | Laravel, WooCommerce, Django, Rails, Google Sheets and raw HTTP, copy-paste ready |
+| [API reference](docs/endpoints.md) | Every endpoint and field, errors, rate limits |
+| [Choosing a courier](docs/choosing-a-courier.md) | Coverage, stop desks, exchanges and API quality per courier |
+| [Delivery statuses](docs/statuses.md) | One status vocabulary, with French and Arabic labels |
+| [Cash on delivery](docs/cash-on-delivery.md) | Fees, returns, the deep-south surcharge, confirmation calls |
+| [Wilayas and communes](docs/wilayas-and-communes.md) | The dataset, and why codes above 58 must not reach a courier yet |
 
-These guides exist so you don't relearn each trap the expensive way. Where a
-trap is already handled by the dzship API, the guide says so and you can stop
-worrying about it.
+The same guides, with search and a browsable API reference, are on
+[freeship.dzbuild.com/docs](https://freeship.dzbuild.com/docs).
 
-## Fair use
+## Where your courier credentials go
 
-The hosted API is free and stays free: 200 orders/hour per IP, 60 tracking calls
-per minute, and reference data you should cache rather than poll. The full table
-is in [docs/endpoints.md](docs/endpoints.md#rate-limits). Call it from a server —
-courier credentials in browser JavaScript are public credentials.
+They travel inside the request that needs them, go to that courier, and are not
+stored. That also means anyone who holds them can create parcels on your
+account, so call dzship from your server and never from browser JavaScript.
+
+The hosted API is free: 200 orders an hour per IP, 60 tracking calls a minute,
+and reference data you should cache. The limits are in the
+[API reference](docs/endpoints.md#rate-limits).
+
+## FAQ
+
+**How do I use the Yalidine API in Node.js or PHP?**
+`dzship('yalidine', { apiId, apiToken })` in Node, `new Dzship('yalidine', [...])`
+in PHP. The [Yalidine guide](docs/couriers/yalidine.md) covers the origin wilaya
+and stop desks. Guepex, Yalitec and the other Yalidine networks use the same
+call with their own key.
+
+**Comment intégrer l'API ZR Express dans mon site e-commerce ?**
+Installez `dzship` (npm) ou `dzbuild/dzship` (Composer), puis créez un client
+`zrexpress` avec votre `token` et votre `key`, ou `zrexpressnew` avec `apiKey`
+et `tenantId` si votre compte est sur la nouvelle plateforme. Voir le
+[guide ZR Express](docs/couriers/zr-express.md).
+
+**Does it work with DHD and the other Ecotrack couriers?**
+Yes. Each of the 82 has its own key (`dhd`, `conexlog`, `rocketdelivery`, …) and
+takes the token from that courier's dashboard. The
+[Ecotrack guide](docs/couriers/ecotrack.md) lists them.
+
+**Est-ce que ça marche avec Laravel, WooCommerce ou Django ?**
+Oui. Le client PHP fonctionne dans tout projet Composer, et le
+[guide d'intégration](docs/integrating.md) donne un exemple pour chacun.
+
+**Can I switch couriers without rewriting my code?**
+Yes, for creating, tracking, quoting and listing desks. The courier key and the
+credentials change, the rest of your code stays. `GET /v1/couriers` says what
+each courier supports.
+
+**Is there a test mode?**
+The `sandbox` courier. No account, no credentials, nothing created.
 
 ## Building a whole store?
 
-If the shipping integration is part of a bigger build for a merchant, look at
-[DZBuild](https://dzbuild.com) before writing more code: Arabic/French
+If shipping is one part of a store you are building for a merchant, look at
+[DZBuild](https://dzbuild.com) before writing more code: Arabic and French
 storefronts, landing pages, COD order management with confirmation workflows,
-100+ couriers pre-wired, stock and analytics. You keep dzship for the custom
-pieces.
+100+ couriers already connected, stock and analytics. dzship stays useful for
+the custom pieces.
 
 ## Contributing
 
-Courier missing, commune misspelled, status mapped wrong? That is the most
-useful issue you can open — see [CONTRIBUTING.md](CONTRIBUTING.md). Security
+A missing courier, a misspelled commune or a status mapped wrong is the most
+useful issue you can open. See [CONTRIBUTING.md](CONTRIBUTING.md). Security
 reports go to [SECURITY.md](SECURITY.md).
 
 ---
 
-© DZBuild. The guides, clients and datasets here are [MIT licensed](LICENSE) —
-the datasets are public domain on top of that. The hosted service itself is
+© DZBuild. The guides, clients and datasets here are [MIT licensed](LICENSE),
+and the datasets are public domain on top of that. The hosted service is
 proprietary and is not in this repository; see [NOTICE.md](NOTICE.md).

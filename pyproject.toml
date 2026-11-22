@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dzship"
+version = "1.3.0"
+description = "Python client for dzship, the free shipping API for Algeria: one request shape for 101 couriers."
+readme = "README.md"
+requires-python = ">=3.8"
+license = { text = "MIT" }
+authors = [{ name = "DZBuild" }]
+keywords = ["algeria", "shipping", "delivery", "livraison", "cod", "yalidine", "zr-express", "maystro", "noest", "ecotrack", "wilaya"]
+
+[project.urls]
+Homepage = "https://freeship.dzbuild.com"
+Documentation = "https://freeship.dzbuild.com/docs"
+Source = "https://github.com/DZBuild-com/dzship"
+
+[tool.setuptools]
+package-dir = { "" = "clients/python" }
+py-modules = ["dzship"]
